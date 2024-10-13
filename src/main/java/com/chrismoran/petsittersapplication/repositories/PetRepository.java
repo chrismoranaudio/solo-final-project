@@ -14,4 +14,5 @@ public interface PetRepository extends CrudRepository<Pet, Long> {
 	List<Pet> findAll();
 	
 	List<Pet> findByClient(Client client);
+
 }

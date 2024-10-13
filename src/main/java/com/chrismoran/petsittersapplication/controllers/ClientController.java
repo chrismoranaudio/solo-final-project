@@ -1,9 +1,5 @@
 package com.chrismoran.petsittersapplication.controllers;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,10 +10,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.chrismoran.petsittersapplication.models.Client;
-import com.chrismoran.petsittersapplication.models.Pet;
 import com.chrismoran.petsittersapplication.services.ClientService;
 import com.chrismoran.petsittersapplication.services.UserService;
 
@@ -60,48 +54,27 @@ public class ClientController {
 	// Process the new client form
 	@PostMapping("/clients/new")
 	public String createClient(
-			@Valid @ModelAttribute("newClient") Client newClient,
-			BindingResult result, 
-			@RequestParam Map<String, String> requestParams) {
+	        @Valid @ModelAttribute("newClient") Client newClient,
+	        BindingResult result) {
 		Long userId = (Long) session.getAttribute("userId");
 		if(userId == null) {
 			return "redirect:/";
 		}
-		if(result.hasErrors()) {
-			return "newClient.jsp";
-		}
-		// We need to get the pet information from the request params
-		List<Pet> pets = new ArrayList<>();
-		
-		// Handling dogs
-		int numberOfDogs = Integer.parseInt(requestParams.get("numberOfDogs"));
-		for(int i = 1; i <= numberOfDogs; i++) {
-			Pet dog = new Pet();
-			dog.setName(requestParams.get("dog" + i + "Name"));
-			dog.setNotes(requestParams.get("dog" + i + "Notes"));
-			dog.setPetType(Pet.PetType.DOG);
-			dog.setClient(newClient);
-			pets.add(dog);
-		}
-		
-		// Handling cats
-		int numberOfCats = Integer.parseInt(requestParams.get("numberOfCats"));
-		for(int i = 1; i <= numberOfCats; i++) {
-			Pet cat = new Pet();
-			cat.setName(requestParams.get("cat" + i + "Name"));
-			cat.setNotes(requestParams.get("cat" + i + "Notes"));
-			cat.setPetType(Pet.PetType.CAT);
-			cat.setClient(newClient);
-			pets.add(cat);
-		}
-		
-		// Set the pets in the client object
-		newClient.setPets(pets);
-		
-		// Save the new client
-		clientService.createClient(newClient);
-		return "redirect:/home";
+	    if (result.hasErrors()) {
+	        return "newClient.jsp";
+	    }
+
+	    // Save the client
+	    clientService.createClient(newClient);
+
+	    // Store the number of dogs and cats in the session
+	    session.setAttribute("numberOfDogs", newClient.getNumberOfDogs());
+	    session.setAttribute("numberOfCats", newClient.getNumberOfCats());
+
+	    // Redirect to the pet form
+	    return "redirect:/clients/" + newClient.getId() + "/pets/new";
 	}
+
 	
 	// Show the edit client form
 	@GetMapping("/clients/{id}/edit")

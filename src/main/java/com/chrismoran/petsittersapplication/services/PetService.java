@@ -30,6 +30,11 @@ public class PetService {
 		return petRepo.save(newPet);
 	}
 	
+	// Save all pets
+	public List<Pet> saveAllPets(List<Pet> pets) {
+		return (List<Pet>) petRepo.saveAll(pets);
+	}
+	
 	// Edit pet
 	public Pet updatePet(Pet petToEdit) {
 		return petRepo.save(petToEdit);
