@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 
+import com.chrismoran.petsittersapplication.dto.ClientUpdateDTO;
 import com.chrismoran.petsittersapplication.models.Client;
 import com.chrismoran.petsittersapplication.models.Pet;
 import com.chrismoran.petsittersapplication.services.ClientService;
@@ -118,7 +119,17 @@ public class PetController {
 	@GetMapping("/clients/{id}/pets/edit")
 	public String editPetForm(@PathVariable("id") Long id, Model model) {
 		Client client = clientService.getOneClient(id);
-		model.addAttribute("client", client);
+		ClientUpdateDTO clientUpdate = clientService.convertToClientUpdateDTO(client);
+		model.addAttribute("clientUpdate", clientUpdate);
+		
+		// Retrieve newDogs and newCats from flash attributes
+		// If there are none, default to 0
+		int newDogs = (int) model.asMap().getOrDefault("newDogs", 0);
+		int newCats = (int) model.asMap().getOrDefault("newCats", 0);
+		
+		model.addAttribute("newDogs", newDogs);
+		model.addAttribute("newCats", newCats);
+		
 		return "editPets.jsp";
 	}
 

@@ -10,7 +10,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.chrismoran.petsittersapplication.dto.ClientUpdateDTO;
 import com.chrismoran.petsittersapplication.models.Client;
 import com.chrismoran.petsittersapplication.services.ClientService;
 import com.chrismoran.petsittersapplication.services.UserService;
@@ -32,7 +35,7 @@ public class ClientController {
 	
 	// Display the client list
 	@GetMapping("/clients/all")
-	public String clientList(Model model) {
+	public String showAllClients(Model model) {
 		Long userId = (Long) session.getAttribute("userId");
 		if(userId == null) {
 			return "redirect:/";
@@ -96,9 +99,10 @@ public class ClientController {
 	// Process the edit client form
 	@PutMapping("/clients/{id}/update")
 	public String updateClient(
-			@PathVariable Long id,
-			@Valid @ModelAttribute("editClient") Client editClient,
-			BindingResult result) {
+			@PathVariable Long id, @RequestParam(defaultValue="0") int newDogs,
+			@RequestParam(defaultValue="0") int newCats,
+			@Valid @ModelAttribute("editClient") ClientUpdateDTO clientUpdateDTO,
+			BindingResult result, RedirectAttributes redirectAttributes) {
 		Long userId = (Long) session.getAttribute("userId");
 		if(userId == null) {
 			return "redirect:/";
@@ -110,8 +114,12 @@ public class ClientController {
 		if(thisClient == null) {
 			return "redirect:/home";
 		}
-		clientService.updateClient(editClient);
-		return "redirect:/home";
+		clientService.updateClient(thisClient);
+		
+		// Add newDogs and newCats to RedirectAttributes
+		redirectAttributes.addFlashAttribute("newDogs", newDogs);
+		redirectAttributes.addFlashAttribute("newCats", newCats);
+		return "redirect:/clients/"+id+"/pets/edit";
 	}
 	
 	// Delete client

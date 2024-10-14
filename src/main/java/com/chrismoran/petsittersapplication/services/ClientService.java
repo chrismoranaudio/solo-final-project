@@ -2,11 +2,14 @@ package com.chrismoran.petsittersapplication.services;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.chrismoran.petsittersapplication.dto.ClientUpdateDTO;
+import com.chrismoran.petsittersapplication.dto.PetUpdateDTO;
 import com.chrismoran.petsittersapplication.models.Client;
 import com.chrismoran.petsittersapplication.models.Pet;
 import com.chrismoran.petsittersapplication.models.Sit;
@@ -72,4 +75,54 @@ public class ClientService {
 		}
 		clientRepo.delete(clientToDelete);
 	}
+	
+	// Client Update Conversion
+	public ClientUpdateDTO convertToClientUpdateDTO(Client client) {
+		ClientUpdateDTO dto = new ClientUpdateDTO();
+		
+		// Set the basic client information
+		dto.setId(client.getId());
+		dto.setFirstName(client.getFirstName());
+		dto.setLastName(client.getLastName());
+		dto.setAddress(client.getAddress());
+		dto.setPhoneNumber(client.getPhoneNumber());
+		dto.setPriceQuoted(client.getPriceQuoted());
+		dto.setDailyVisits(client.getDailyVisits());
+		dto.setNumberOfDogs(client.getNumberOfDogs());
+		dto.setNumberOfCats(client.getNumberOfCats());
+		
+		// Convert and set existing pets
+		List<PetUpdateDTO> existingPets = client.getPets().stream()
+				.map(this::convertToPetUpdateDTO)
+				.collect(Collectors.toList());
+		dto.setExistingPets(existingPets);
+		
+		return dto;
+	}
+	
+	private PetUpdateDTO convertToPetUpdateDTO(Pet pet) {
+		PetUpdateDTO dto = new PetUpdateDTO();
+		dto.setId(pet.getId());
+		dto.setName(pet.getName());
+		dto.setNotes(pet.getNotes());
+		dto.setPetType(pet.getPetType());
+		dto.setToBeRemoved(false); // Initially set to false
+		
+		return dto;
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
