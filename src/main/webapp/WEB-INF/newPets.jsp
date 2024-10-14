@@ -40,6 +40,8 @@
                         <label for="pets[${status.index}].notes">Dog #${dogIndex} Notes:</label>
                         <form:textarea path="pets[${status.index}].notes" class="form-control" placeholder="Dog #${dogIndex} Notes"></form:textarea>
                     </div>
+                    <!-- Add a hidden field to bind the petType -->
+                    <form:hidden path="pets[${status.index}].petType" />
                 </c:if>
             </c:forEach>
         </c:when>
@@ -64,6 +66,8 @@
                         <label for="pets[${status.index}].notes">Cat #${catIndex} Notes:</label>
                         <form:textarea path="pets[${status.index}].notes" class="form-control" placeholder="Cat #${catIndex} Notes"></form:textarea>
                     </div>
+                    <!-- Add a hidden field to bind the petType -->
+                    <form:hidden path="pets[${status.index}].petType" />
                 </c:if>
             </c:forEach>
         </c:when>
@@ -73,7 +77,7 @@
     </c:choose>
 
     <input type="submit" class="btn btn-primary" value="Submit">
-	</form:form>
+</form:form>
 </div>
 </body>
 </html>

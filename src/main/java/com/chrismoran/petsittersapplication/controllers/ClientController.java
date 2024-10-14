@@ -37,8 +37,8 @@ public class ClientController {
 		if(userId == null) {
 			return "redirect:/";
 		}
-		model.addAttribute("allClients", clientService.getAllClients());
-		return "clientList.jsp";
+		model.addAttribute("clientslients", clientService.getAllClients());
+		return "allClients.jsp";
 	}
 	
 	// Show the new client form

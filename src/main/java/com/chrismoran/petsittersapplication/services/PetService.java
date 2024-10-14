@@ -9,7 +9,10 @@ import com.chrismoran.petsittersapplication.models.Client;
 import com.chrismoran.petsittersapplication.models.Pet;
 import com.chrismoran.petsittersapplication.repositories.PetRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
+@Transactional
 public class PetService {
 
 	@Autowired
@@ -25,8 +28,8 @@ public class PetService {
 		return petRepo.findByClient(client);
 	}
 	
-	// Create a new pet
-	public Pet createPet(Pet newPet) {
+	// Save a new pet
+	public Pet savePet(Pet newPet) {
 		return petRepo.save(newPet);
 	}
 	

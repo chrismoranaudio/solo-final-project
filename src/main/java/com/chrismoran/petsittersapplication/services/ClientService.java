@@ -13,7 +13,10 @@ import com.chrismoran.petsittersapplication.repositories.ClientRepository;
 import com.chrismoran.petsittersapplication.repositories.PetRepository;
 import com.chrismoran.petsittersapplication.repositories.SitRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
+@Transactional
 public class ClientService {
 
 	@Autowired

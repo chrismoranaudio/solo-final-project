@@ -35,9 +35,7 @@ public class PetController {
 	// Show new pet form
 	@GetMapping("/clients/{clientId}/pets/new")
 	public String showNewPetForm(
-	        @PathVariable("clientId") Long clientId, 
-	        HttpSession session, 
-	        Model model) {
+	        @PathVariable("clientId") Long clientId, Model model) {
 
 	    Client client = clientService.getOneClient(clientId);
 	    if (client == null) {
@@ -47,6 +45,14 @@ public class PetController {
 	    // Retrieve the number of dogs and cats from the session
 	    Integer numberOfDogs = (Integer) session.getAttribute("numberOfDogs");
 	    Integer numberOfCats = (Integer) session.getAttribute("numberOfCats");
+
+	    // Handle null values by defaulting to 0
+	    if (numberOfDogs == null) {
+	        numberOfDogs = 0;
+	    }
+	    if (numberOfCats == null) {
+	        numberOfCats = 0;
+	    }
 
 	    // Ensure pets list is initialized
 	    if (client.getPets() == null) {
@@ -75,45 +81,45 @@ public class PetController {
 	@PostMapping("/clients/{clientId}/pets/new")
 	public String createPets(
 	        @PathVariable("clientId") Long clientId,
-	        @Valid @ModelAttribute("client") Client client,
-	        BindingResult result, Model model, HttpSession session) {
+	        @ModelAttribute("client") Client clientForm,
+	        BindingResult result, Model model) {
 
 	    Long userId = (Long) session.getAttribute("userId");
 	    if (userId == null) {
 	        return "redirect:/";
 	    }
 
-	    // Retrieve the existing client from the database
 	    Client existingClient = clientService.getOneClient(clientId);
 	    if (existingClient == null) {
 	        return "redirect:/home";
 	    }
 
 	    if (result.hasErrors()) {
-	        model.addAttribute("client", existingClient); // Ensure client info is still passed back
+	        model.addAttribute("client", existingClient);
 	        return "newPets.jsp";
 	    }
 
-	    // Save each pet explicitly and associate it with the client
-	    List<Pet> petsToSave = new ArrayList<>();
-	    for (Pet pet : client.getPets()) {
+	    System.out.println("Number of pets in form: " + clientForm.getPets().size());
+	    
+	    List<Pet> savedPets = new ArrayList<>();
+	    for (Pet pet : clientForm.getPets()) {
 	        if (pet.getName() != null && !pet.getName().isEmpty()) {
-	            pet.setClient(existingClient);  // Link pet to the existing client
-	            petsToSave.add(pet);
+	        	System.out.println("Saving pet: " + pet.getName() + ", Type: " + pet.getPetType());
+	            pet.setClient(existingClient);
+	            Pet savedPet = petService.savePet(pet);
+	            savedPets.add(savedPet);
+	            System.out.println("Saved pet with ID: " + savedPet.getId());
 	        }
 	    }
 
-	    // Save the pets explicitly using PetService
-	    petService.saveAllPets(petsToSave);
-
-	    // Add all new pets to the existing client
-	    existingClient.getPets().addAll(petsToSave);
-
-	    // Save the client with the updated pets list
-	    clientService.updateClient(existingClient);
+	    existingClient.setPets(savedPets);
+	    Client updatedClient = clientService.updateClient(existingClient);
+	    
+	    System.out.println("Updated client. Number of pets: " + updatedClient.getPets().size());
 
 	    return "redirect:/home";
 	}
+
 	
 }
 

@@ -1,5 +1,6 @@
 package com.chrismoran.petsittersapplication.models;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -103,7 +104,7 @@ public class Client {
 		this.dailyVisits = dailyVisits;
 		this.numberOfDogs = numberOfDogs;
 		this.numberOfCats = numberOfCats;
-		this.pets = pets;
+		this.pets = new ArrayList<>();
 		this.sits = sits;
 	}
 
