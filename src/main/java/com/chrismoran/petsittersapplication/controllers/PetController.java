@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 
 import com.chrismoran.petsittersapplication.models.Client;
 import com.chrismoran.petsittersapplication.models.Pet;
@@ -18,7 +19,6 @@ import com.chrismoran.petsittersapplication.services.ClientService;
 import com.chrismoran.petsittersapplication.services.PetService;
 
 import jakarta.servlet.http.HttpSession;
-import jakarta.validation.Valid;
 
 @Controller
 public class PetController {
@@ -98,23 +98,66 @@ public class PetController {
 	        model.addAttribute("client", existingClient);
 	        return "newPets.jsp";
 	    }
-
-	    System.out.println("Number of pets in form: " + clientForm.getPets().size());
 	    
 	    List<Pet> savedPets = new ArrayList<>();
 	    for (Pet pet : clientForm.getPets()) {
 	        if (pet.getName() != null && !pet.getName().isEmpty()) {
-	        	System.out.println("Saving pet: " + pet.getName() + ", Type: " + pet.getPetType());
 	            pet.setClient(existingClient);
 	            Pet savedPet = petService.savePet(pet);
 	            savedPets.add(savedPet);
-	            System.out.println("Saved pet with ID: " + savedPet.getId());
+	        }
+	    }
+	    existingClient.setPets(savedPets);
+	    
+//	    Client updatedClient = clientService.updateClient(existingClient);
+//	    System.out.println("Updated client. Number of pets: " + updatedClient.getPets().size());
+	    return "redirect:/home";
+	}
+	
+	// Show edit pet form
+	@GetMapping("/clients/{id}/pets/edit")
+	public String editPetForm(@PathVariable("id") Long id, Model model) {
+		Client client = clientService.getOneClient(id);
+		model.addAttribute("client", client);
+		return "editPets.jsp";
+	}
+
+	// Update the pets
+	@PutMapping("/clients/{clientId}/pets/update")
+	public String updatePets(
+	        @PathVariable("clientId") Long clientId,
+	        @ModelAttribute("client") Client clientForm,
+	        BindingResult result,
+	        Model model) {
+
+	    Long userId = (Long) session.getAttribute("userId");
+	    if (userId == null) {
+	        return "redirect:/";
+	    }
+
+	    Client existingClient = clientService.getOneClient(clientId);
+	    if (existingClient == null) {
+	        return "redirect:/home";
+	    }
+
+	    if (result.hasErrors()) {
+	        model.addAttribute("client", existingClient);
+	        return "editPets.jsp";
+	    }
+
+	    // Remove existing pets
+	    existingClient.getPets().clear();
+
+	    // Add updated pets
+	    for (Pet pet : clientForm.getPets()) {
+	        if (pet.getName() != null && !pet.getName().isEmpty()) {
+	            pet.setClient(existingClient);
+	            existingClient.getPets().add(pet);
 	        }
 	    }
 
-	    existingClient.setPets(savedPets);
+	    // Update the client (which will cascade to pets)
 	    Client updatedClient = clientService.updateClient(existingClient);
-	    
 	    System.out.println("Updated client. Number of pets: " + updatedClient.getPets().size());
 
 	    return "redirect:/home";

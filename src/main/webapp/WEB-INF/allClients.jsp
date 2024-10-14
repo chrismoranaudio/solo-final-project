@@ -10,19 +10,21 @@
 </head>
 <body>
 <div class="container">
-	<div class="d-flex justify-content-between align-items-center mt-5 mb-1">
+	<div class="d-flex justify-content-between align-items-center my-5">
 		<h1>My Clients</h1>
 		<form action="/logout" method="POST">
 			<input type="submit" value="Log out" class="btn btn-secondary"/>
 		</form>
 	</div>
-	<h2>All Parks</h2>
-	<table class="table table-striped">
+	<div class="row justify-content-center">
+		<div class="col-10">
+		<table class="table table-striped table-bordered mb-5">
             <thead>
                 <tr>
-                    <th>First and Last Name</th>
+                    <th>Client Name</th>
                     <th>Pets</th>
                     <th>Daily Visits</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -51,11 +53,17 @@
                             </c:if>
                         </td>
                         <td>${client.dailyVisits}</td>
+                        <td>
+                        	<a href="/clients/${client.id}/edit">Edit Client</a> | 
+                        	<a href="/clients/${client.id}/pets/edit">Edit Pets</a>
+                        </td>
                     </tr>
                 </c:forEach>
             </tbody>
         </table>
-	<a href="/gizmos/new">Add a gizmo</a>
+		<a href="/clients/new" class="btn btn-secondary btn-lg w-100">New Client</a>
+		</div>
+	</div>
 </div>
 </body>
 </html>

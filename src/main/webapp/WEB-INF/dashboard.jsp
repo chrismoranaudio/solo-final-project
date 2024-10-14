@@ -18,7 +18,7 @@
 	</form>
 	<div class="row">
 		<div class="col-md-6 d-grid gap-3">
-			<button type="button" class="btn btn-secondary btn-lg">Client List</button>
+			<a href="/clients/all" class="btn btn-secondary btn-lg">Client List</a>
 			<a href="/clients/new" class="btn btn-secondary btn-lg">New Client</a>
 			<button type="button" class="btn btn-secondary btn-lg">Booked Sits</button>
 			<button type="button" class="btn btn-secondary btn-lg">New Sit</button>

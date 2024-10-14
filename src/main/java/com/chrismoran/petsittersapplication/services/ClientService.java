@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.chrismoran.petsittersapplication.models.Client;
 import com.chrismoran.petsittersapplication.models.Pet;
@@ -13,7 +14,6 @@ import com.chrismoran.petsittersapplication.repositories.ClientRepository;
 import com.chrismoran.petsittersapplication.repositories.PetRepository;
 import com.chrismoran.petsittersapplication.repositories.SitRepository;
 
-import jakarta.transaction.Transactional;
 
 @Service
 @Transactional
@@ -29,6 +29,7 @@ public class ClientService {
 	private SitRepository sitRepo;
 	
 	// Get all clients
+	@Transactional(readOnly = true)
 	public List<Client> getAllClients() {
 		return clientRepo.findAll();
 	}

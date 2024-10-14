@@ -37,7 +37,7 @@ public class ClientController {
 		if(userId == null) {
 			return "redirect:/";
 		}
-		model.addAttribute("clientslients", clientService.getAllClients());
+		model.addAttribute("clients", clientService.getAllClients());
 		return "allClients.jsp";
 	}
 	
@@ -80,7 +80,7 @@ public class ClientController {
 	@GetMapping("/clients/{id}/edit")
 	public String editClientForm(
 			@ModelAttribute("editClient")
-			@PathVariable Long id, Model model) {
+			@PathVariable("id") Long id, Model model) {
 		Long userId = (Long) session.getAttribute("userId");
 		if(userId == null) {
 			return "redirect:/";
