@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import com.chrismoran.petsittersapplication.dto.ClientUpdateDTO;
 import com.chrismoran.petsittersapplication.models.Client;
 import com.chrismoran.petsittersapplication.models.Pet;
+import com.chrismoran.petsittersapplication.models.PetType;
 import com.chrismoran.petsittersapplication.services.ClientService;
 import com.chrismoran.petsittersapplication.services.PetService;
 
@@ -63,12 +64,12 @@ public class PetController {
 	    // Prepare the Client's Pet list with empty Pet objects
 	    for (int i = 0; i < numberOfDogs; i++) {
 	        Pet dog = new Pet();
-	        dog.setPetType(Pet.PetType.DOG);
+	        dog.setPetType(PetType.DOG);
 	        client.getPets().add(dog);
 	    }
 	    for (int i = 0; i < numberOfCats; i++) {
 	        Pet cat = new Pet();
-	        cat.setPetType(Pet.PetType.CAT);
+	        cat.setPetType(PetType.CAT);
 	        client.getPets().add(cat);
 	    }
 
@@ -112,7 +113,7 @@ public class PetController {
 	    
 //	    Client updatedClient = clientService.updateClient(existingClient);
 //	    System.out.println("Updated client. Number of pets: " + updatedClient.getPets().size());
-	    return "redirect:/home";
+	    return "redirect:/clients/all";
 	}
 	
 	// Show edit pet form

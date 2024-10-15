@@ -6,8 +6,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -46,12 +44,8 @@ public class Pet {
     @NotBlank(message="Pet name is required")
     private String name;
     
-    @Enumerated(EnumType.STRING)
+    //@Enumerated(EnumType.STRING)
     private PetType petType;
-    
-    public enum PetType {
-    	DOG, CAT
-    }
     
     private String notes;
     

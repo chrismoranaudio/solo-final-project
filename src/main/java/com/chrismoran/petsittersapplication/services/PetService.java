@@ -1,6 +1,7 @@
 package com.chrismoran.petsittersapplication.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,12 @@ public class PetService {
 	// Get all pets
 	public List<Pet> getAllPets() {
 		return petRepo.findAll();
+	}
+	
+	// Get one pet by id
+	public Pet getOnePet(Long id) {
+		Optional<Pet> possiblePet = petRepo.findById(id);
+		return possiblePet.orElse(null);
 	}
 	
 	// Find pets by client

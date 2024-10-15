@@ -81,25 +81,27 @@ public class ClientController {
 	
 	// Show the edit client form
 	@GetMapping("/clients/{id}/edit")
-	public String editClientForm(
-			@ModelAttribute("editClient")
-			@PathVariable("id") Long id, Model model) {
-		Long userId = (Long) session.getAttribute("userId");
-		if(userId == null) {
-			return "redirect:/";
-		}
-		Client thisClient = clientService.getOneClient(id);
-		if(thisClient == null) {
-			return "redirect:/home";
-		}
-		model.addAttribute("editClient", thisClient);
-		return "editClient.jsp";
+	public String editClientForm(@PathVariable("id") Long id, Model model) {
+	    Long userId = (Long) session.getAttribute("userId");
+	    if(userId == null) {
+	        return "redirect:/";
+	    }
+	    Client thisClient = clientService.getOneClient(id);
+	    if(thisClient == null) {
+	        return "redirect:/home";
+	    }
+	    ClientUpdateDTO clientUpdateDTO = clientService.convertToClientUpdateDTO(thisClient);
+	    model.addAttribute("editClient", clientUpdateDTO);
+	    model.addAttribute("newDogs", 0);
+	    model.addAttribute("newCats", 0);
+	    return "editClient.jsp";
 	}
 	
 	// Process the edit client form
 	@PutMapping("/clients/{id}/update")
 	public String updateClient(
-			@PathVariable Long id, @RequestParam(defaultValue="0") int newDogs,
+			@PathVariable Long id, 
+			@RequestParam(defaultValue="0") int newDogs,
 			@RequestParam(defaultValue="0") int newCats,
 			@Valid @ModelAttribute("editClient") ClientUpdateDTO clientUpdateDTO,
 			BindingResult result, RedirectAttributes redirectAttributes) {
@@ -110,16 +112,16 @@ public class ClientController {
 		if(result.hasErrors()) {
 			return "editClient.jsp";
 		}
-		Client thisClient = clientService.getOneClient(id);
-		if(thisClient == null) {
-			return "redirect:/home";
-		}
-		clientService.updateClient(thisClient);
-		
-		// Add newDogs and newCats to RedirectAttributes
-		redirectAttributes.addFlashAttribute("newDogs", newDogs);
-		redirectAttributes.addFlashAttribute("newCats", newCats);
-		return "redirect:/clients/"+id+"/pets/edit";
+		Client updatedClient = clientService.updateClientFromDTO(id, clientUpdateDTO);
+	    if(updatedClient == null) {
+	        return "redirect:/home";
+	    }
+	    
+	    // Add newDogs and newCats to RedirectAttributes
+	    redirectAttributes.addFlashAttribute("newDogs", newDogs);
+	    redirectAttributes.addFlashAttribute("newCats", newCats);
+	    
+	    return "redirect:/clients/"+id+"/pets/edit";
 	}
 	
 	// Delete client

@@ -115,7 +115,7 @@
 	    <div class="row mb-3">
 		    <div class="col-md-6">
 		        <h3>Existing Pets</h3>
-		        <c:forEach var="pet" items="${editClient.pets}" varStatus="status">
+		        <c:forEach var="pet" items="${editClient.existingPets}" varStatus="status">
 		            <div class="form-check">
 		                <input class="form-check-input" type="checkbox" name="petsToRemove" value="${pet.id}" id="pet${pet.id}">
 		                <label class="form-check-label" for="pet${pet.id}">
@@ -125,15 +125,32 @@
 		        </c:forEach>
 		    </div>
 		    <div class="col-md-6">
-		        <h3>Add New Pets</h3>
-		        <div class="mb-3">
-		            <label for="newDogs" class="form-label">New Dogs to Add:</label>
-		            <input type="number" class="form-control" id="newDogs" name="newDogs" min="0" value="0">
-		        </div>
-		        <div class="mb-3">
-		            <label for="newCats" class="form-label">New Cats to Add:</label>
-		            <input type="number" class="form-control" id="newCats" name="newCats" min="0" value="0">
-		        </div>
+		        <h3>New Dogs</h3>
+		        <c:if test="${newDogs > 0}">
+					<c:forEach begin="0" end="${newDogs - 1}" var="index">
+					    <div class="form-group">
+					        <label for="newDogs[${index}].name">New Dog #${index + 1} Name:</label>
+					        <input type="text" name="newDogs[${index}].name" class="form-control"/>
+					    </div>
+					    <div class="form-group">
+					        <label for="newDogs[${index}].notes">New Dog #${index + 1} Notes:</label>
+					        <textarea name="newDogs[${index}].notes" class="form-control"></textarea>
+					    </div>
+					</c:forEach>
+				</c:if>
+				<h3>New Cats</h3>
+				<c:if test="${newCats > 0}">
+					<c:forEach begin="0" end="${newCats - 1}" var="index">
+					    <div class="form-group">
+					        <label for="newCats[${index}].name">New Cat #${index + 1} Name:</label>
+					        <input type="text" name="newCats[${index}].name" class="form-control"/>
+					    </div>
+					    <div class="form-group">
+					        <label for="newCats[${index}].notes">New Cat #${index + 1} Notes:</label>
+					        <textarea name="newCats[${index}].notes" class="form-control"></textarea>
+					    </div>
+					</c:forEach>
+				</c:if>
 		    </div>
 		</div>
 

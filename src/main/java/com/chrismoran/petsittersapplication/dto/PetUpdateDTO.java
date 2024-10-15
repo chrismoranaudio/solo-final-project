@@ -1,5 +1,7 @@
 package com.chrismoran.petsittersapplication.dto;
 
+import com.chrismoran.petsittersapplication.models.PetType;
+
 public class PetUpdateDTO {
 
 	private Long id;
@@ -9,10 +11,6 @@ public class PetUpdateDTO {
 	private PetType petType;
 	
 	public PetUpdateDTO() {}
-	
-	public enum PetType {
-		DOG, CAT
-	}
 
 	// Getters & Setters
 	public Long getId() {
@@ -39,7 +37,7 @@ public class PetUpdateDTO {
 		this.notes = notes;
 	}
 
-	public Boolean getToBeRemoved() {
+	public Boolean isToBeRemoved() {
 		return toBeRemoved;
 	}
 
@@ -53,7 +51,5 @@ public class PetUpdateDTO {
 
 	public void setPetType(PetType petType) {
 		this.petType = petType;
-	}
-	
-	
+	}	
 }

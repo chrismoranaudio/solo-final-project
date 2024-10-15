@@ -16,6 +16,7 @@ public class ClientUpdateDTO {
 	private List<PetUpdateDTO> existingPets;
 	private List<PetUpdateDTO> newDogs;
 	private List<PetUpdateDTO> newCats;
+	private List<Long> petsToRemove;
 	
 	public ClientUpdateDTO() {}
 
@@ -23,7 +24,6 @@ public class ClientUpdateDTO {
 		return id;
 	}
 
-	// Getters & Setters
 	public void setId(Long id) {
 		this.id = id;
 	}
@@ -116,7 +116,12 @@ public class ClientUpdateDTO {
 		this.newCats = newCats;
 	}
 
-	
-	
-	
+	public List<Long> getPetsToRemove() {
+		return petsToRemove;
+	}
+
+	public void setPetsToRemove(List<Long> petsToRemove) {
+		this.petsToRemove = petsToRemove;
+	}
+
 }
