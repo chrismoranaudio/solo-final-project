@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 
 import com.chrismoran.petsittersapplication.models.Client;
+import com.chrismoran.petsittersapplication.models.PetDetailsForm;
 import com.chrismoran.petsittersapplication.services.ClientService;
+import com.chrismoran.petsittersapplication.services.PetService;
 import com.chrismoran.petsittersapplication.services.UserService;
 
 import jakarta.servlet.http.HttpSession;
@@ -26,6 +28,9 @@ public class ClientController {
 	
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private PetService petService;
 	
 	@Autowired
 	private HttpSession session;
@@ -73,34 +78,49 @@ public class ClientController {
 	
 	// Show the edit client form
 	@GetMapping("/clients/{id}/edit")
-	public String editClientForm(@PathVariable("id") Long id, Model model) {
-	    Long userId = (Long) session.getAttribute("userId");
-	    if(userId == null) {
-	        return "redirect:/";
+	public String showEditClientForm(@PathVariable("id") Long id, Model model) {
+	    Client client = clientService.getOneClient(id);
+	    if (client == null) {
+	        return "redirect:/clients/all";
 	    }
-	    Client thisClient = clientService.getOneClient(id);
-	    if(thisClient == null) {
-	        return "redirect:/home";
-	    }
-	    
+	    model.addAttribute("client", client);
 	    return "editClient.jsp";
 	}
-	
-	// Process the edit client form
-	@PutMapping("/clients/{id}/update")
-	public String updateClient(
-			@PathVariable Long id,
-			@Valid @ModelAttribute("editClient") Client editClient,
-			BindingResult result) {
-		Long userId = (Long) session.getAttribute("userId");
-		if(userId == null) {
-			return "redirect:/";
-		}
-		if(result.hasErrors()) {
-			return "editClient.jsp";
-		}
-		
-	    return "redirect:/clients/"+id+"/pets/edit";
+
+	@PutMapping("/clients/{id}/edit")
+	public String processEditClientForm(@PathVariable("id") Long id, @Valid @ModelAttribute("client") Client updatedClient, BindingResult result) {
+	    if (result.hasErrors()) {
+	        return "editClient.jsp";
+	    }
+	    Client existingClient = clientService.getOneClient(id);
+	    if(existingClient == null) {
+	    	return "redirect:/clients/all";
+	    }
+	    // Update only client info (nothing pet related)
+	    clientService.updateClientDetails(existingClient, updatedClient);
+	    
+	    return "redirect:/clients/all";
+	}
+
+	@GetMapping("/clients/{id}/pets/edit")
+	public String showEditPetsForm(@PathVariable("id") Long id, Model model) {
+	    Client client = clientService.getOneClient(id);
+	    if (client == null) {
+	        return "redirect:/clients/all";
+	    }
+	    model.addAttribute("client", client);
+	    model.addAttribute("petDetailsForm", new PetDetailsForm());
+	    return "editPets.jsp";
+	}
+
+	@PutMapping("/clients/{id}/pets/edit")
+	public String processEditPetsForm(@PathVariable("id") Long id, @ModelAttribute("petDetailsForm") PetDetailsForm form) {
+	    Client client = clientService.getOneClient(id);
+	    if (client == null) {
+	        return "redirect:/clients/all";
+	    }
+	    petService.updateClientPets(client, form);
+	    return "redirect:/clients/all";
 	}
 	
 	// Delete client

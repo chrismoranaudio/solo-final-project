@@ -7,14 +7,13 @@
 <html>
 <head>
 <link rel="stylesheet" href="/webjars/bootstrap/css/bootstrap.min.css" />
-<script src="/webjars/bootstrap/js/bootstrap.min.js"></script>
 <meta charset="UTF-8">
 <title>Edit Client</title>
 </head>
 <body>
 <div class="container">
-	<div class="d-flex justify-content-between align-items-center mt-5 mb-3">
-		<h1>Edit <c:out value="${editClient.firstName} ${editClient.lastName}"/></h1>
+	<div class="d-flex justify-content-between align-items-center my-5">
+		<h1>Edit Client</h1>
 		<div>
 			<a href="/home" class="btn btn-link">dashboard</a>
 			<form action="/logout" method="POST" class="d-inline">
@@ -23,143 +22,40 @@
 		</div>
 	</div>
 	<h2 class="mb-3">Client Info</h2>
-	<form:form action="/clients/${editClient.id}/update" method="POST" modelAttribute="editClient">
-		<input type="hidden" name="_method" value="put"/>
-	    <div class="row mb-3">
-	        <div class="col-md-6">
-	            <div class="row">
-	                <div class="col-md-6">
-	                    <div class="form-floating mb-3">
-	                        <form:input path="firstName" class="form-control" placeholder="First Name"/>
-	                        <form:label path="firstName">First Name</form:label>
-	                        <form:errors path="firstName" class="text-danger"/>
-	                    </div>
-	                </div>
-	                <div class="col-md-6">
-	                    <div class="form-floating mb-3">
-	                        <form:input path="lastName" class="form-control" placeholder="Last Name"/>
-	                        <form:label path="lastName">Last Name</form:label>
-	                        <form:errors path="lastName" class="text-danger"/>
-	                    </div>
-	                </div>
-	            </div>
-	        </div>
-	
-	        <div class="col-md-1"></div> 
-	
-	        <div class="col-md-5">
-	            <div class="mb-3 row">
-	                <label for="priceQuoted" class="col-md-4 col-form-label">Price Quoted:</label>
-	                <div class="col-md-8">
-	                    <div class="input-group">
-	                        <span class="input-group-text">$</span>
-	                        <form:input path="priceQuoted" class="form-control"/>
-	                    </div>
-	                    <form:errors path="priceQuoted" class="text-danger"/>
-	                </div>
-	            </div>
-	        </div>
-	    </div>
-
-	    <div class="row mb-3">
-	        <div class="col-md-6">
-	            <div class="form-floating mb-3">
-	                <form:textarea path="address" class="form-control" placeholder="Address" style="height: 100px;"></form:textarea>
-	                <form:label path="address">Address</form:label>
-	                <form:errors path="address" class="text-danger"/>
-	            </div>
-	        </div>
-	
-	        <div class="col-md-1"></div> 
-	
-	        <div class="col-md-5">
-	            <div class="mb-3 row">
-	                <label for="dailyVisits" class="col-md-4 col-form-label">Daily Visits:</label>
-	                <div class="col-md-8">
-	                    <form:input path="dailyVisits" type="number" class="form-control"/>
-	                    <form:errors path="dailyVisits" class="text-danger"/>
-	                </div>
-	            </div>
-	
-	            <div class="mb-3 row">
-	                <label for="numberOfDogs" class="col-md-4 col-form-label">Number of Dogs:</label>
-	                <div class="col-md-8">
-	                    <form:input path="numberOfDogs" id="numberOfDogs" type="number" class="form-control"/>
-	                    <form:errors path="numberOfDogs" class="text-danger"/>
-	                </div>
-	            </div>
-	        </div>
-	    </div>
-
-	    <div class="row mb-3">
-	        <div class="col-md-6">
-	            <div class="form-floating mb-3">
-	                <form:input path="phoneNumber" type="tel" class="form-control" placeholder="Phone Number"/>
-	                <form:label path="phoneNumber">Phone Number</form:label>
-	                <form:errors path="phoneNumber" class="text-danger"/>
-	            </div>
-	        </div>
-	
-	        <div class="col-md-1"></div> 
-	
-	        <div class="col-md-5">
-	            <div class="mb-3 row">
-	                <label for="numberOfCats" class="col-md-4 col-form-label">Number of Cats:</label>
-	                <div class="col-md-8">
-	                    <form:input path="numberOfCats" id="numberOfCats" type="number" class="form-control"/>
-	                    <form:errors path="numberOfCats" class="text-danger"/>
-	                </div>
-	            </div>
-	        </div>
-	    </div>
-	    <div class="row mb-3">
-		    <div class="col-md-6">
-		        <h3>Existing Pets</h3>
-		        <c:forEach var="pet" items="${editClient.existingPets}" varStatus="status">
-		            <div class="form-check">
-		                <input class="form-check-input" type="checkbox" name="petsToRemove" value="${pet.id}" id="pet${pet.id}">
-		                <label class="form-check-label" for="pet${pet.id}">
-		                    Remove ${pet.name} (${pet.petType})
-		                </label>
-		            </div>
-		        </c:forEach>
-		    </div>
-		    <div class="col-md-6">
-		        <h3>New Dogs</h3>
-		        <c:if test="${newDogs > 0}">
-					<c:forEach begin="0" end="${newDogs - 1}" var="index">
-					    <div class="form-group">
-					        <label for="newDogs[${index}].name">New Dog #${index + 1} Name:</label>
-					        <input type="text" name="newDogs[${index}].name" class="form-control"/>
-					    </div>
-					    <div class="form-group">
-					        <label for="newDogs[${index}].notes">New Dog #${index + 1} Notes:</label>
-					        <textarea name="newDogs[${index}].notes" class="form-control"></textarea>
-					    </div>
-					</c:forEach>
-				</c:if>
-				<h3>New Cats</h3>
-				<c:if test="${newCats > 0}">
-					<c:forEach begin="0" end="${newCats - 1}" var="index">
-					    <div class="form-group">
-					        <label for="newCats[${index}].name">New Cat #${index + 1} Name:</label>
-					        <input type="text" name="newCats[${index}].name" class="form-control"/>
-					    </div>
-					    <div class="form-group">
-					        <label for="newCats[${index}].notes">New Cat #${index + 1} Notes:</label>
-					        <textarea name="newCats[${index}].notes" class="form-control"></textarea>
-					    </div>
-					</c:forEach>
-				</c:if>
-		    </div>
-		</div>
-
-	    <div class="row">
-	        <div class="col-md-12 text-center">
-	            <input type="submit" class="btn btn-primary btn-lg w-50" value="Submit"/>
-	        </div>
-	    </div>
-	</form:form>
+	<form:form action="/clients/${client.id}/edit" method="POST" modelAttribute="client">
+	<input type="hidden" name="_method" value="put"/>
+        <div class="mb-3">
+            <form:label path="firstName" class="form-label">First Name:</form:label>
+            <form:input path="firstName" class="form-control"/>
+            <form:errors path="firstName" class="text-danger"/>
+        </div>
+        <div class="mb-3">
+            <form:label path="lastName" class="form-label">Last Name:</form:label>
+            <form:input path="lastName" class="form-control"/>
+            <form:errors path="lastName" class="text-danger"/>
+        </div>
+        <div class="mb-3">
+            <form:label path="address" class="form-label">Address:</form:label>
+            <form:textarea path="address" class="form-control"/>
+            <form:errors path="address" class="text-danger"/>
+        </div>
+        <div class="mb-3">
+            <form:label path="phoneNumber" class="form-label">Phone Number:</form:label>
+            <form:input path="phoneNumber" class="form-control"/>
+            <form:errors path="phoneNumber" class="text-danger"/>
+        </div>
+        <div class="mb-3">
+            <form:label path="priceQuoted" class="form-label">Price Quoted:</form:label>
+            <form:input path="priceQuoted" class="form-control"/>
+            <form:errors path="priceQuoted" class="text-danger"/>
+        </div>
+        <div class="mb-3">
+            <form:label path="dailyVisits" class="form-label">Daily Visits:</form:label>
+            <form:input path="dailyVisits" type="number" class="form-control"/>
+            <form:errors path="dailyVisits" class="text-danger"/>
+        </div>
+        <button type="submit" class="btn btn-primary">Update Client</button>
+    </form:form>
 </div>
 </body>
 </html>

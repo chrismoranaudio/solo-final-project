@@ -14,7 +14,7 @@
 <body>
 <div class="container">
 	<div class="d-flex justify-content-between align-items-center mt-5 mb-3">
-		<h1>Edit <c:out value="${client.firstName}"/>'s Pet(s)</h1>
+	<h1 class="my-4">Edit Pets for ${client.firstName} ${client.lastName}</h1>
 		<div>
 			<a href="/home" class="btn btn-link">dashboard</a>
 			<form action="/logout" method="POST" class="d-inline">
@@ -22,50 +22,54 @@
 			</form>
 		</div>
 	</div>
-	<h2 class="mb-3">Pet(s) Info</h2>
-	<form:form action="/clients/${client.id}/pets/update" method="POST" modelAttribute="clientUpdate">
-	    <input type="hidden" name="_method" value="put"/>
-	    
-	    <h2>Existing Pets</h2>
-	    <c:forEach var="pet" items="${clientUpdate.existingPets}" varStatus="status">
-	        <div class="mb-3">
-	            <label for="existingPets[${status.index}].name">${pet.petType} Name:</label>
-	            <form:input path="existingPets[${status.index}].name" class="form-control"/>
-	        </div>
-	        <div class="mb-3">
-	            <label for="existingPets[${status.index}].notes">${pet.petType} Notes:</label>
-	            <form:textarea path="existingPets[${status.index}].notes" class="form-control"/>
-	        </div>
-	        <form:hidden path="existingPets[${status.index}].id"/>
-	        <form:hidden path="existingPets[${status.index}].petType"/>
-	    </c:forEach>
-	
-	    <h2>New Dogs</h2>
-	    <c:forEach begin="1" end="${newDogs}" varStatus="status">
-	        <div class="mb-3">
-	            <label for="newDogs[${status.index-1}].name">New Dog #${status.index} Name:</label>
-	            <input type="text" name="newDogs[${status.index-1}].name" class="form-control"/>
-	        </div>
-	        <div class="mb-3">
-	            <label for="newDogs[${status.index-1}].notes">New Dog #${status.index} Notes:</label>
-	            <textarea name="newDogs[${status.index-1}].notes" class="form-control"></textarea>
-	        </div>
-	    </c:forEach>
-	
-	    <h2>New Cats</h2>
-	    <c:forEach begin="1" end="${newCats}" varStatus="status">
-	        <div class="mb-3">
-	            <label for="newCats[${status.index-1}].name">New Cat #${status.index} Name:</label>
-	            <input type="text" name="newCats[${status.index-1}].name" class="form-control"/>
-	        </div>
-	        <div class="mb-3">
-	            <label for="newCats[${status.index-1}].notes">New Cat #${status.index} Notes:</label>
-	            <textarea name="newCats[${status.index-1}].notes" class="form-control"></textarea>
-	        </div>
-	    </c:forEach>
-	
-	    <input type="submit" class="btn btn-primary" value="Submit">
-	</form:form>
+    <form:form action="/clients/${client.id}/pets/edit" method="POST" modelAttribute="petDetailsForm">
+    <input type="hidden" name="_method" value="put" />
+        <h2>Dogs</h2>
+        <c:forEach var="pet" items="${client.pets}" varStatus="status">
+            <c:if test="${pet.petType == 'dog'}">
+                <div class="mb-3">
+                    <form:label path="dogNames[${status.index}]" class="form-label">Dog Name:</form:label>
+                    <form:input path="dogNames[${status.index}]" class="form-control" value="${pet.name}"/>
+                </div>
+                <div class="mb-3">
+                    <form:label path="dogNotes[${status.index}]" class="form-label">Dog Notes:</form:label>
+                    <form:textarea path="dogNotes[${status.index}]" class="form-control" value="${pet.notes}"/>
+                </div>
+            </c:if>
+        </c:forEach>
+        <div class="mb-3">
+            <form:label path="dogNames[${client.numberOfDogs}]" class="form-label">New Dog Name:</form:label>
+            <form:input path="dogNames[${client.numberOfDogs}]" class="form-control"/>
+        </div>
+        <div class="mb-3">
+            <form:label path="dogNotes[${client.numberOfDogs}]" class="form-label">New Dog Notes:</form:label>
+            <form:textarea path="dogNotes[${client.numberOfDogs}]" class="form-control"/>
+        </div>
+
+        <h2>Cats</h2>
+        <c:forEach var="pet" items="${client.pets}" varStatus="status">
+            <c:if test="${pet.petType == 'cat'}">
+                <div class="mb-3">
+                    <form:label path="catNames[${status.index}]" class="form-label">Cat Name:</form:label>
+                    <form:input path="catNames[${status.index}]" class="form-control" value="${pet.name}"/>
+                </div>
+                <div class="mb-3">
+                    <form:label path="catNotes[${status.index}]" class="form-label">Cat Notes:</form:label>
+                    <form:textarea path="catNotes[${status.index}]" class="form-control" value="${pet.notes}"/>
+                </div>
+            </c:if>
+        </c:forEach>
+        <div class="mb-3">
+            <form:label path="catNames[${client.numberOfCats}]" class="form-label">New Cat Name:</form:label>
+            <form:input path="catNames[${client.numberOfCats}]" class="form-control"/>
+        </div>
+        <div class="mb-3">
+            <form:label path="catNotes[${client.numberOfCats}]" class="form-label">New Cat Notes:</form:label>
+            <form:textarea path="catNotes[${client.numberOfCats}]" class="form-control"/>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Update Pets</button>
+    </form:form>
 </div>
 </body>
 </html>

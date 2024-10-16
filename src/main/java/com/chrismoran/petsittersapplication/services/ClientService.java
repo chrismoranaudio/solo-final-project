@@ -60,6 +60,18 @@ public class ClientService {
 		return clientRepo.save(clientToEdit);
 	}
 	
+	// Update client details only (nothing pet related)
+	@Transactional
+	public void updateClientDetails(Client existingClient, Client updatedClient) {
+	    existingClient.setFirstName(updatedClient.getFirstName());
+	    existingClient.setLastName(updatedClient.getLastName());
+	    existingClient.setAddress(updatedClient.getAddress());
+	    existingClient.setPhoneNumber(updatedClient.getPhoneNumber());
+	    existingClient.setPriceQuoted(updatedClient.getPriceQuoted());
+	    existingClient.setDailyVisits(updatedClient.getDailyVisits());
+	    clientRepo.save(existingClient);
+	}
+	
 	// Method to update client pet count
 	@Transactional
 	public void updateClientPetCounts(Client client) {

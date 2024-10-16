@@ -1,5 +1,6 @@
 package com.chrismoran.petsittersapplication.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.chrismoran.petsittersapplication.models.Client;
 import com.chrismoran.petsittersapplication.models.Pet;
+import com.chrismoran.petsittersapplication.models.PetDetailsForm;
 import com.chrismoran.petsittersapplication.repositories.ClientRepository;
 import com.chrismoran.petsittersapplication.repositories.PetRepository;
 
@@ -69,7 +71,52 @@ public class PetService {
 	    clientRepo.save(client);
 	}
 	
-	// Update a client's pets
+	// Update a client's pets from a form
+	@Transactional
+	public void updateClientPets(Client client, PetDetailsForm form) {
+	    List<Pet> updatedPets = new ArrayList<>();
+	    
+	    // Process dogs
+	    for (int i = 0; i < form.getDogNames().size(); i++) {
+	        String name = form.getDogNames().get(i);
+	        String notes = form.getDogNotes().get(i);
+	        if (name != null && !name.trim().isEmpty()) {
+	            Pet dog = new Pet();
+	            dog.setName(name);
+	            dog.setNotes(notes);
+	            dog.setPetType("dog");
+	            dog.setClient(client);
+	            updatedPets.add(dog);
+	        }
+	    }
+	    
+	    // Process cats
+	    for (int i = 0; i < form.getCatNames().size(); i++) {
+	        String name = form.getCatNames().get(i);
+	        String notes = form.getCatNotes().get(i);
+	        if (name != null && !name.trim().isEmpty()) {
+	            Pet cat = new Pet();
+	            cat.setName(name);
+	            cat.setNotes(notes);
+	            cat.setPetType("cat");
+	            cat.setClient(client);
+	            updatedPets.add(cat);
+	        }
+	    }
+	    
+	    // Remove all existing pets
+	    petRepo.deleteAll(client.getPets());
+	    
+	    // Save all new and updated pets
+	    petRepo.saveAll(updatedPets);
+	    
+	    // Update client's pet counts
+	    client.setNumberOfDogs((int) updatedPets.stream().filter(p -> p.getPetType().equals("dog")).count());
+	    client.setNumberOfCats((int) updatedPets.stream().filter(p -> p.getPetType().equals("cat")).count());
+	    clientRepo.save(client);
+	}
+	
+	// Update client with list of new pets
 	public void updateClientPets(Client client, List<Pet> newPets) {
 	    // Remove all existing pets
 	    List<Pet> existingPets = petRepo.findByClient(client);
