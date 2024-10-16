@@ -5,18 +5,16 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import com.chrismoran.petsittersapplication.dto.ClientUpdateDTO;
 import com.chrismoran.petsittersapplication.models.Client;
 import com.chrismoran.petsittersapplication.models.Pet;
-import com.chrismoran.petsittersapplication.models.PetType;
+import com.chrismoran.petsittersapplication.models.PetDetailsForm;
 import com.chrismoran.petsittersapplication.services.ClientService;
 import com.chrismoran.petsittersapplication.services.PetService;
 
@@ -34,148 +32,94 @@ public class PetController {
 	@Autowired
 	private HttpSession session;
 	
-	// Show new pet form
-	@GetMapping("/clients/{clientId}/pets/new")
-	public String showNewPetForm(
-	        @PathVariable("clientId") Long clientId, Model model) {
+	// Show number of pets selection form
+	@GetMapping("/pets/numberSelection")
+	public String showPetNumberForm(@RequestParam("clientId") Long clientId, Model model) {
+	    // Define the options for the number of dogs and cats
+	    List<Integer> dogOptions = new ArrayList<>();
+	    List<Integer> catOptions = new ArrayList<>();
 
-	    Client client = clientService.getOneClient(clientId);
-	    if (client == null) {
-	        return "redirect:/clients";  // Redirect if the client doesn't exist
+	    // Populate the lists with numbers (1-5)
+	    for (int i = 0; i <= 5; i++) {
+	        dogOptions.add(i);
+	        catOptions.add(i);
 	    }
 
-	    // Retrieve the number of dogs and cats from the session
+	    model.addAttribute("dogOptions", dogOptions);
+	    model.addAttribute("catOptions", catOptions);
+	    model.addAttribute("clientId", clientId);
+
+	    return "petNumberForm.jsp"; 
+	}
+	
+	// Process the number of pets selection form
+	@PostMapping("/pets/numberSelection")
+	public String processPetNumberForm(
+	        @RequestParam("numberOfDogs") Integer numberOfDogs,
+	        @RequestParam("numberOfCats") Integer numberOfCats,
+	        @RequestParam("clientId") Long clientId) {
+
+	    // Store the number of dogs and cats in the session
+	    session.setAttribute("numberOfDogs", numberOfDogs);
+	    session.setAttribute("numberOfCats", numberOfCats);
+	    session.setAttribute("clientId", clientId);
+
+	    return "redirect:/pets/detailsForm";
+	}
+	
+	// Show pet details form
+	@GetMapping("/pets/detailsForm")
+	public String showPetDetailsForm(Model model) {
+	    // Retrieve the number of dogs, cats, and client ID from the session
 	    Integer numberOfDogs = (Integer) session.getAttribute("numberOfDogs");
 	    Integer numberOfCats = (Integer) session.getAttribute("numberOfCats");
+	    Long clientId = (Long) session.getAttribute("clientId");
 
-	    // Handle null values by defaulting to 0
-	    if (numberOfDogs == null) {
-	        numberOfDogs = 0;
-	    }
-	    if (numberOfCats == null) {
-	        numberOfCats = 0;
-	    }
+	    // Add these values to the model
+	    model.addAttribute("numberOfDogs", numberOfDogs);
+	    model.addAttribute("numberOfCats", numberOfCats);
+	    model.addAttribute("clientId", clientId);
 
-	    // Ensure pets list is initialized
-	    if (client.getPets() == null) {
-	        client.setPets(new ArrayList<>());  // Initialize the pets list if null
-	    }
+	    // Add an empty PetDetailsForm to bind the form data
+	    model.addAttribute("petDetailsForm", new PetDetailsForm());
 
-	    // Prepare the Client's Pet list with empty Pet objects
-	    for (int i = 0; i < numberOfDogs; i++) {
-	        Pet dog = new Pet();
-	        dog.setPetType(PetType.DOG);
-	        client.getPets().add(dog);
-	    }
-	    for (int i = 0; i < numberOfCats; i++) {
-	        Pet cat = new Pet();
-	        cat.setPetType(PetType.CAT);
-	        client.getPets().add(cat);
-	    }
-
-	    // Add client with pets to the model
-	    model.addAttribute("client", client);
-
-	    return "newPets.jsp";
+	    return "petDetailsForm.jsp"; 
 	}
 	
-	// Process the new pet form
-	@PostMapping("/clients/{clientId}/pets/new")
-	public String createPets(
-	        @PathVariable("clientId") Long clientId,
-	        @ModelAttribute("client") Client clientForm,
-	        BindingResult result, Model model) {
-
-	    Long userId = (Long) session.getAttribute("userId");
-	    if (userId == null) {
-	        return "redirect:/";
-	    }
-
-	    Client existingClient = clientService.getOneClient(clientId);
-	    if (existingClient == null) {
-	        return "redirect:/home";
-	    }
-
-	    if (result.hasErrors()) {
-	        model.addAttribute("client", existingClient);
-	        return "newPets.jsp";
-	    }
-	    
-	    List<Pet> savedPets = new ArrayList<>();
-	    for (Pet pet : clientForm.getPets()) {
-	        if (pet.getName() != null && !pet.getName().isEmpty()) {
-	            pet.setClient(existingClient);
-	            Pet savedPet = petService.savePet(pet);
-	            savedPets.add(savedPet);
-	        }
-	    }
-	    existingClient.setPets(savedPets);
-	    
-//	    Client updatedClient = clientService.updateClient(existingClient);
-//	    System.out.println("Updated client. Number of pets: " + updatedClient.getPets().size());
-	    return "redirect:/clients/all";
-	}
-	
-	// Show edit pet form
-	@GetMapping("/clients/{id}/pets/edit")
-	public String editPetForm(@PathVariable("id") Long id, Model model) {
-		Client client = clientService.getOneClient(id);
-		ClientUpdateDTO clientUpdate = clientService.convertToClientUpdateDTO(client);
-		model.addAttribute("clientUpdate", clientUpdate);
+	@Transactional
+	@PostMapping("/pets/detailsSubmission")
+	public String processPetDetails(@ModelAttribute("petDetailsForm") PetDetailsForm form,
+            @RequestParam("clientId") Long clientId) {
+		Client client = clientService.getOneClient(clientId);
+		if (client == null) {
+		return "redirect:/clients";
+		}
 		
-		// Retrieve newDogs and newCats from flash attributes
-		// If there are none, default to 0
-		int newDogs = (int) model.asMap().getOrDefault("newDogs", 0);
-		int newCats = (int) model.asMap().getOrDefault("newCats", 0);
+		List<Pet> newPets = new ArrayList<>();
 		
-		model.addAttribute("newDogs", newDogs);
-		model.addAttribute("newCats", newCats);
+		// Process dogs
+		for (int i = 0; i < form.getDogNames().size(); i++) {
+		Pet dog = new Pet();
+		dog.setName(form.getDogNames().get(i));
+		dog.setNotes(form.getDogNotes().get(i));
+		dog.setPetType("dog");
+		newPets.add(dog);
+		}
 		
-		return "editPets.jsp";
-	}
+		// Process cats
+		for (int i = 0; i < form.getCatNames().size(); i++) {
+		Pet cat = new Pet();
+		cat.setName(form.getCatNames().get(i));
+		cat.setNotes(form.getCatNotes().get(i));
+		cat.setPetType("cat");
+		newPets.add(cat);
+		}
+		
+		petService.updateClientPets(client, newPets);
+		
+		return "redirect:/home";
+		}
 
-	// Update the pets
-	@PutMapping("/clients/{clientId}/pets/update")
-	public String updatePets(
-	        @PathVariable("clientId") Long clientId,
-	        @ModelAttribute("client") Client clientForm,
-	        BindingResult result,
-	        Model model) {
-
-	    Long userId = (Long) session.getAttribute("userId");
-	    if (userId == null) {
-	        return "redirect:/";
-	    }
-
-	    Client existingClient = clientService.getOneClient(clientId);
-	    if (existingClient == null) {
-	        return "redirect:/home";
-	    }
-
-	    if (result.hasErrors()) {
-	        model.addAttribute("client", existingClient);
-	        return "editPets.jsp";
-	    }
-
-	    // Remove existing pets
-	    existingClient.getPets().clear();
-
-	    // Add updated pets
-	    for (Pet pet : clientForm.getPets()) {
-	        if (pet.getName() != null && !pet.getName().isEmpty()) {
-	            pet.setClient(existingClient);
-	            existingClient.getPets().add(pet);
-	        }
-	    }
-
-	    // Update the client (which will cascade to pets)
-	    Client updatedClient = clientService.updateClient(existingClient);
-	    System.out.println("Updated client. Number of pets: " + updatedClient.getPets().size());
-
-	    return "redirect:/home";
-	}
-
-	
 }
 
 

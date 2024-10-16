@@ -6,6 +6,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -44,19 +45,20 @@ public class Pet {
     @NotBlank(message="Pet name is required")
     private String name;
     
-    //@Enumerated(EnumType.STRING)
-    private PetType petType;
+    @NotBlank(message="Pet type is required")
+    private String petType;
     
     private String notes;
     
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="client_id", nullable=false)
     private Client client;
     
     // Constructors
     public Pet() {}
 
-	public Pet(@NotBlank(message = "Pet name is required") String name, PetType petType, String notes, Client client) {
+	public Pet(@NotBlank(message = "Pet name is required") String name,
+			@NotBlank(message = "Pet type is required") String petType, String notes, Client client) {
 		this.name = name;
 		this.petType = petType;
 		this.notes = notes;
@@ -96,11 +98,11 @@ public class Pet {
 		this.name = name;
 	}
 
-	public PetType getPetType() {
+	public String getPetType() {
 		return petType;
 	}
 
-	public void setPetType(PetType petType) {
+	public void setPetType(String petType) {
 		this.petType = petType;
 	}
 
@@ -119,5 +121,5 @@ public class Pet {
 	public void setClient(Client client) {
 		this.client = client;
 	}
-  	
+	
 }

@@ -10,10 +10,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.chrismoran.petsittersapplication.dto.ClientUpdateDTO;
 import com.chrismoran.petsittersapplication.models.Client;
 import com.chrismoran.petsittersapplication.services.ClientService;
 import com.chrismoran.petsittersapplication.services.UserService;
@@ -67,15 +64,10 @@ public class ClientController {
 	        return "newClient.jsp";
 	    }
 
-	    // Save the client
-	    clientService.createClient(newClient);
-
-	    // Store the number of dogs and cats in the session
-	    session.setAttribute("numberOfDogs", newClient.getNumberOfDogs());
-	    session.setAttribute("numberOfCats", newClient.getNumberOfCats());
+	    Client savedClient = clientService.createClient(newClient);
 
 	    // Redirect to the pet form
-	    return "redirect:/clients/" + newClient.getId() + "/pets/new";
+	    return "redirect:/pets/numberSelection?clientId="+savedClient.getId();
 	}
 
 	
@@ -90,21 +82,16 @@ public class ClientController {
 	    if(thisClient == null) {
 	        return "redirect:/home";
 	    }
-	    ClientUpdateDTO clientUpdateDTO = clientService.convertToClientUpdateDTO(thisClient);
-	    model.addAttribute("editClient", clientUpdateDTO);
-	    model.addAttribute("newDogs", 0);
-	    model.addAttribute("newCats", 0);
+	    
 	    return "editClient.jsp";
 	}
 	
 	// Process the edit client form
 	@PutMapping("/clients/{id}/update")
 	public String updateClient(
-			@PathVariable Long id, 
-			@RequestParam(defaultValue="0") int newDogs,
-			@RequestParam(defaultValue="0") int newCats,
-			@Valid @ModelAttribute("editClient") ClientUpdateDTO clientUpdateDTO,
-			BindingResult result, RedirectAttributes redirectAttributes) {
+			@PathVariable Long id,
+			@Valid @ModelAttribute("editClient") Client editClient,
+			BindingResult result) {
 		Long userId = (Long) session.getAttribute("userId");
 		if(userId == null) {
 			return "redirect:/";
@@ -112,15 +99,7 @@ public class ClientController {
 		if(result.hasErrors()) {
 			return "editClient.jsp";
 		}
-		Client updatedClient = clientService.updateClientFromDTO(id, clientUpdateDTO);
-	    if(updatedClient == null) {
-	        return "redirect:/home";
-	    }
-	    
-	    // Add newDogs and newCats to RedirectAttributes
-	    redirectAttributes.addFlashAttribute("newDogs", newDogs);
-	    redirectAttributes.addFlashAttribute("newCats", newCats);
-	    
+		
 	    return "redirect:/clients/"+id+"/pets/edit";
 	}
 	

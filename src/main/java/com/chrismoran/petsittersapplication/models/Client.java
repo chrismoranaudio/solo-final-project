@@ -1,12 +1,10 @@
 package com.chrismoran.petsittersapplication.models;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -70,15 +68,11 @@ public class Client {
     @Max(value=4, message="Maximum 4 dailys visits are allowed")
     private Integer dailyVisits;
     
-    @NotNull(message="Number of dogs is required")
-    @Min(value=0, message="Cannot have fewer than 0 dogs")
-    private Integer numberOfDogs;
+    private Integer numberOfDogs = 0;
     
-    @NotNull(message="Number of cats is required")
-    @Min(value=0, message="Cannot have fewer than 0 cats")
-    private Integer numberOfCats;
+    private Integer numberOfCats = 0;
     
-    @OneToMany(mappedBy="client", cascade=CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy="client", fetch = FetchType.LAZY)
     private List<Pet> pets;
     
     @OneToMany(mappedBy="client", fetch = FetchType.LAZY)
@@ -93,9 +87,7 @@ public class Client {
 			@NotBlank(message = "Phone number is required") @Pattern(regexp = "^(\\+0?1\\s)?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4}$", message = "Please enter a valid phone number") String phoneNumber,
 			@NotNull(message = "Price quoted is required") @Min(value = 0, message = "Price quoted must be a positive number") Double priceQuoted,
 			@NotNull(message = "Please enter number of daily visits required") @Min(value = 1, message = "At least 1 daily visit is required") @Max(value = 4, message = "Maximum 4 dailys visits are allowed") Integer dailyVisits,
-			@NotNull(message = "Number of dogs is required") @Min(value = 0, message = "Cannot have fewer than 0 dogs") Integer numberOfDogs,
-			@NotNull(message = "Number of cats is required") @Min(value = 0, message = "Cannot have fewer than 0 cats") Integer numberOfCats,
-			List<Pet> pets, List<Sit> sits) {
+			Integer numberOfDogs, Integer numberOfCats, List<Pet> pets, List<Sit> sits) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.address = address;
@@ -104,11 +96,10 @@ public class Client {
 		this.dailyVisits = dailyVisits;
 		this.numberOfDogs = numberOfDogs;
 		this.numberOfCats = numberOfCats;
-		this.pets = new ArrayList<>();
+		this.pets = pets;
 		this.sits = sits;
 	}
 
-	// Getters & Setters
 	public Long getId() {
 		return id;
 	}
@@ -212,5 +203,4 @@ public class Client {
 	public void setSits(List<Sit> sits) {
 		this.sits = sits;
 	}
-	
 }

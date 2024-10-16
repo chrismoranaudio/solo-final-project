@@ -32,26 +32,17 @@
                     <tr>
                         <td>${client.firstName} ${client.lastName}</td>
                         <td>
-                            <c:set var="dogs" value="0" />
-                            <c:set var="cats" value="0" />
-                            <c:forEach var="pet" items="${client.pets}">
-                                <c:choose>
-                                    <c:when test="${pet.petType == 'DOG'}">
-                                        <c:set var="dogs" value="${dogs + 1}" />
-                                    </c:when>
-                                    <c:when test="${pet.petType == 'CAT'}">
-                                        <c:set var="cats" value="${cats + 1}" />
-                                    </c:when>
-                                </c:choose>
-                            </c:forEach>
-                            <c:if test="${dogs > 0}">
-                                ${dogs} dog<c:if test="${dogs > 1}">s</c:if>
-                            </c:if>
-                            <c:if test="${dogs > 0 && cats > 0}">, </c:if>
-                            <c:if test="${cats > 0}">
-                                ${cats} cat<c:if test="${cats > 1}">s</c:if>
-                            </c:if>
-                        </td>
+						    <c:if test="${client.numberOfDogs > 0}">
+						        ${client.numberOfDogs} dog<c:if test="${client.numberOfDogs > 1}">s</c:if>
+						    </c:if>
+						    <c:if test="${client.numberOfDogs > 0 && client.numberOfCats > 0}">, </c:if>
+						    <c:if test="${client.numberOfCats > 0}">
+						        ${client.numberOfCats} cat<c:if test="${client.numberOfCats > 1}">s</c:if>
+						    </c:if>
+						    <c:if test="${client.numberOfDogs == 0 && client.numberOfCats == 0}">
+						        No pets
+						    </c:if>
+						</td>
                         <td>${client.dailyVisits}</td>
                         <td>
                         	<a href="/clients/${client.id}/edit">Edit Client</a> | 

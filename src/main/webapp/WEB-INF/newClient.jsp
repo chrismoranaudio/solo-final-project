@@ -81,11 +81,7 @@
             </div>
 
             <div class="mb-3 row">
-                <label for="numberOfDogs" class="col-md-4 col-form-label">Number of Dogs:</label>
-                <div class="col-md-8">
-                    <form:input path="numberOfDogs" id="numberOfDogs" type="number" class="form-control"/>
-                    <form:errors path="numberOfDogs" class="text-danger"/>
-                </div>
+                <div class="col-md-8"></div>
             </div>
         </div>
     </div>
@@ -103,21 +99,13 @@
 
         <div class="col-md-5">
             <div class="mb-3 row">
-                <label for="numberOfCats" class="col-md-4 col-form-label">Number of Cats:</label>
                 <div class="col-md-8">
-                    <form:input path="numberOfCats" id="numberOfCats" type="number" class="form-control"/>
-                    <form:errors path="numberOfCats" class="text-danger"/>
+                	<input type="submit" class="btn btn-primary btn-lg" value="How Many Pets We Got?!"/>   
                 </div>
             </div>
         </div>
     </div>
-
-    <div class="row">
-        <div class="col-md-12 text-center">
-            <input type="submit" class="btn btn-primary btn-lg" value="Now Tell Me About Their Fur-Babies!"/>
-        </div>
-    </div>
-</form:form>
+	</form:form>
 </div>
 </body>
 </html>
