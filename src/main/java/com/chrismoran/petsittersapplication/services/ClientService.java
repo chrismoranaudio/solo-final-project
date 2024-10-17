@@ -69,6 +69,18 @@ public class ClientService {
 	    clientRepo.save(existingClient);
 	}
 	
+	// Update client pet count
+	@Transactional
+	public void updateClientPetCounts(Client client) {
+	    int dogCount = (int) client.getPets().stream().filter(p -> "dog".equals(p.getPetType())).count();
+	    int catCount = (int) client.getPets().stream().filter(p -> "cat".equals(p.getPetType())).count();
+	    
+	    client.setNumberOfDogs(dogCount);
+	    client.setNumberOfCats(catCount);
+	    clientRepo.save(client);
+	}
+
+	
 	// Delete by id
 	public void deleteClient(Long id) {
 		Client clientToDelete = this.getOneClient(id);

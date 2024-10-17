@@ -146,6 +146,7 @@ public class PetController {
 		return "editExistingPets.jsp";
 	}
 	
+	@Transactional
 	@PutMapping("/clients/{clientId}/pets/update")
 	public String updateExistingPets(
 			@PathVariable Long clientId, 
@@ -176,7 +177,6 @@ public class PetController {
 	    return "addPetForm.jsp";
 	}
 
-//	    List<Integer> petOptions = IntStream.rangeClosed(0, 5).boxed().collect(Collectors.toList());
 	@PostMapping("/clients/{clientId}/pets/add")
 	public String processAddPetForm(@PathVariable Long clientId, 
 			@RequestParam int numberOfDogs, 

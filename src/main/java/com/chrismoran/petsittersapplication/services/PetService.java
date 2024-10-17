@@ -13,6 +13,7 @@ import com.chrismoran.petsittersapplication.models.PetDetailsForm;
 import com.chrismoran.petsittersapplication.repositories.ClientRepository;
 import com.chrismoran.petsittersapplication.repositories.PetRepository;
 
+import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -26,6 +27,9 @@ public class PetService {
 	
 	@Autowired
 	private ClientService clientService;
+	
+	@Autowired
+	private EntityManager entityManager;
 	
 	// Get all pets
 	public List<Pet> getAllPets() {
@@ -145,11 +149,29 @@ public class PetService {
 	    petRepo.saveAll(updatedPets);  // Save all pets including new and updated pets
 
 	    // Update client’s pet counts
-	    client.setNumberOfDogs((int) updatedPets.stream().filter(p -> p.getPetType().equals("dog")).count());
-	    client.setNumberOfCats((int) updatedPets.stream().filter(p -> p.getPetType().equals("cat")).count());
-	    clientRepo.save(client);  // Ensure client’s pet counts are updated properly
+	    updateClientPetCounts(client);
+	    
+	    // Save the client with all updates
+	    clientRepo.save(client);
+	    
+	    // Flush changes to the database
+	    entityManager.flush();
+	    
+	    // Refresh the client entity
+	    entityManager.refresh(client);
 	}
 
+	// Update client pet count
+	@Transactional
+	public void updateClientPetCounts(Client client) {
+	    int dogCount = (int) client.getPets().stream().filter(p -> "dog".equals(p.getPetType())).count();
+	    int catCount = (int) client.getPets().stream().filter(p -> "cat".equals(p.getPetType())).count();
+	    
+	    client.setNumberOfDogs(dogCount);
+	    client.setNumberOfCats(catCount);
+	    clientRepo.save(client);
+	}
+	
 	// Sending to master updater
 	public void updateExistingPets(Long clientId, PetDetailsForm form) {
 	    updateClientPets(clientId, form, false);
