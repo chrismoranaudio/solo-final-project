@@ -101,27 +101,6 @@ public class ClientController {
 	    
 	    return "redirect:/clients/all";
 	}
-
-	@GetMapping("/clients/{id}/pets/edit")
-	public String showEditPetsForm(@PathVariable("id") Long id, Model model) {
-	    Client client = clientService.getOneClient(id);
-	    if (client == null) {
-	        return "redirect:/clients/all";
-	    }
-	    model.addAttribute("client", client);
-	    model.addAttribute("petDetailsForm", new PetDetailsForm());
-	    return "editPets.jsp";
-	}
-
-	@PutMapping("/clients/{id}/pets/edit")
-	public String processEditPetsForm(@PathVariable("id") Long id, @ModelAttribute("petDetailsForm") PetDetailsForm form) {
-	    Client client = clientService.getOneClient(id);
-	    if (client == null) {
-	        return "redirect:/clients/all";
-	    }
-	    petService.updateClientPets(client, form);
-	    return "redirect:/clients/all";
-	}
 	
 	// Delete client
 	@DeleteMapping("/clients/{id}/delete")
