@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 import com.chrismoran.petsittersapplication.models.Client;
 import com.chrismoran.petsittersapplication.services.ClientService;
-import com.chrismoran.petsittersapplication.services.PetService;
-import com.chrismoran.petsittersapplication.services.UserService;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -24,12 +22,6 @@ public class ClientController {
 
 	@Autowired
 	private ClientService clientService;
-	
-	@Autowired
-	private UserService userService;
-	
-	@Autowired
-	private PetService petService;
 	
 	@Autowired
 	private HttpSession session;
@@ -43,6 +35,17 @@ public class ClientController {
 		}
 		model.addAttribute("clients", clientService.getAllClients());
 		return "allClients.jsp";
+	}
+	
+	// Display one client
+	@GetMapping("/clients/{clientId}/view")
+	public String viewClient(@PathVariable Long clientId, Model model) {
+		Client client = clientService.getOneClient(clientId);
+		if(client == null) {
+			return "redirect:/clients/all";
+		}
+		model.addAttribute("client", client);
+		return "viewClient.jsp";
 	}
 	
 	// Show the new client form

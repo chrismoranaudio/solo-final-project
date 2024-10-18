@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.chrismoran.petsittersapplication.models.Client;
 import com.chrismoran.petsittersapplication.models.Sit;
@@ -51,14 +52,19 @@ public class SitController {
 	
 	// Show new sit form
 	@GetMapping("/sits/new")
-	public String showSitForm(Model model) {
+	public String showSitForm(@RequestParam(value="clientId", required=false) Long clientId, Model model) {
 		Long userId = (Long) session.getAttribute("userId");
 		if(userId == null) {
 			return "redirect:/";
 		}
-		
 		List<Client> clients = clientService.getAllClients();
 		model.addAttribute("clients", clients);
+		
+		if(clientId != null) {
+			Client client = clientService.getOneClient(clientId);
+			model.addAttribute("selectedClient", client);
+		}
+		
 		model.addAttribute("newSit", new Sit());
 		
 		return "newSit.jsp";
@@ -96,6 +102,9 @@ public class SitController {
 		if(userId == null) {
 			return "redirect:/";
 		}
+		List<Client> clients = clientService.getAllClients();
+		model.addAttribute("clients", clients);
+		
 		Sit thisSit = sitService.getOneSit(id);
 		if(thisSit == null) {
 			return "redirect:/home";
@@ -109,20 +118,27 @@ public class SitController {
 	public String updateSit(
 			@PathVariable Long id,
 			@Valid @ModelAttribute("editSit") Sit editSit,
-			BindingResult result) {
+			BindingResult result, Model model) {
 		Long userId = (Long) session.getAttribute("userId");
 		if(userId == null) {
 			return "redirect:/";
-		}
-		if(result.hasErrors()) {
-			return "editSit.jsp";
 		}
 		Sit thisSit = sitService.getOneSit(id);
 		if(thisSit == null) {
 			return "redirect:/home";
 		}
+		
+		if(editSit.getEndDate().isBefore(editSit.getStartDate())) {
+			result.rejectValue("endDate", "error.sit", "End date must be after start date");
+		}
+		
+		if(result.hasErrors()) {
+			model.addAttribute("clients", clientService.getAllClients());
+			return "editSit.jsp";
+		}
+		
 		sitService.updateSit(editSit);
-		return "redirect:/home";
+		return "redirect:/sits/all";
 	}
 	
 	// Delete sit

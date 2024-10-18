@@ -31,7 +31,9 @@
             <tbody>
                 <c:forEach var="client" items="${clients}">
                     <tr>
-                        <td>${client.firstName} ${client.lastName}</td>
+                        <td>
+                        	<a href="/clients/${client.id}/view">${client.firstName} ${client.lastName}</a>
+                       	</td>
                         <td>
 						    <c:if test="${client.numberOfDogs > 0}">
 						        ${client.numberOfDogs} dog<c:if test="${client.numberOfDogs > 1}">s</c:if>

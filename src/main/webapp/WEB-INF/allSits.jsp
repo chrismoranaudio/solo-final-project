@@ -12,10 +12,11 @@
 <div class="container">
     <div class="d-flex justify-content-between align-items-center my-5">
         <h1>All Sits</h1>
-        <form action="/logout" method="POST">
-            <input type="submit" value="Log out" class="btn btn-secondary"/>
-        </form>
+        <a href="/home" class="btn btn-secondary">Dashboard</a>
     </div>
+    <form action="/logout" method="POST">
+            <input type="submit" value="Log out" class="btn btn-link mb-5"/>
+        </form>
     <div class="row justify-content-center">
         <div class="col-10">
         <table class="table table-striped table-bordered mb-5">
