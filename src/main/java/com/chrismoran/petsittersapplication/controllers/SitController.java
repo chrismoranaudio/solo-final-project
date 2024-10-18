@@ -1,5 +1,7 @@
 package com.chrismoran.petsittersapplication.controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 
+import com.chrismoran.petsittersapplication.models.Client;
 import com.chrismoran.petsittersapplication.models.Sit;
 import com.chrismoran.petsittersapplication.services.ClientService;
 import com.chrismoran.petsittersapplication.services.SitService;
@@ -30,10 +33,29 @@ public class SitController {
 	@Autowired
 	private HttpSession session;
 	
+	// Show all sits
+	@GetMapping("/sits/all")
+	public String showAllSits(Model model) {
+		Long userId = (Long) session.getAttribute("userId");
+		if(userId == null) {
+			return "redirect:/";
+		}
+		model.addAttribute("sits", sitService.getAllSits());
+		return "allSits.jsp";
+	}
+	
 	// Show new sit form
 	@GetMapping("/sits/new")
 	public String showSitForm(Model model) {
-		model.addAttribute("allClients", clientService.getAllClients());
+		Long userId = (Long) session.getAttribute("userId");
+		if(userId == null) {
+			return "redirect:/";
+		}
+		
+		List<Client> clients = clientService.getAllClients();
+		model.addAttribute("clients", clients);
+		model.addAttribute("newSit", new Sit());
+		
 		return "newSit.jsp";
 	}
 	
@@ -41,12 +63,19 @@ public class SitController {
 	@PostMapping("/sits/new")
 	public String createSit(
 			@Valid @ModelAttribute("newSit") Sit newSit,
-			BindingResult result) {
+			BindingResult result, Model model) {
 		Long userId = (Long) session.getAttribute("userId");
 		if(userId == null) {
 			return "redirect:/";
 		}
+		// To make sure End Date is after Start date
+		if(newSit.getEndDate().isBefore(newSit.getStartDate())) {
+			result.rejectValue("endDate", "error.sit", "End date must be after start date");
+		}
+		
 		if(result.hasErrors()) {
+			List<Client> clients = clientService.getAllClients();
+			model.addAttribute("clients", clients);
 			return "newSit.jsp";
 		}
 		sitService.createSit(newSit);

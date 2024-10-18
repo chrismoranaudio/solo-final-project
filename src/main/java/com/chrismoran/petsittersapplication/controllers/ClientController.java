@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 
 import com.chrismoran.petsittersapplication.models.Client;
-import com.chrismoran.petsittersapplication.models.PetDetailsForm;
 import com.chrismoran.petsittersapplication.services.ClientService;
 import com.chrismoran.petsittersapplication.services.PetService;
 import com.chrismoran.petsittersapplication.services.UserService;

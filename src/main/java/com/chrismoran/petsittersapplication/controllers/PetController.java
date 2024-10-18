@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -89,7 +88,6 @@ public class PetController {
 	    return "petDetailsForm.jsp"; 
 	}
 	
-	@Transactional
 	@PostMapping("/pets/detailsSubmission")
 	public String processPetDetails(
 			@RequestParam("clientId") Long clientId,
@@ -109,7 +107,7 @@ public class PetController {
 		
 		petService.updateClientPets(clientId, form, true);
 		
-		return "redirect:/home";
+		return "redirect:/clients/all";
 	
 	}
 	
@@ -146,7 +144,7 @@ public class PetController {
 		return "editExistingPets.jsp";
 	}
 	
-	@Transactional
+	// Update existing pets
 	@PutMapping("/clients/{clientId}/pets/update")
 	public String updateExistingPets(
 			@PathVariable Long clientId, 

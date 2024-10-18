@@ -6,8 +6,6 @@
 <head>
 <meta charset="UTF-8">
 <link rel="stylesheet" href="/webjars/bootstrap/css/bootstrap.min.css" />
-<!-- <link rel="stylesheet" href="/css/styles.css"/> -->
-<script src="/webjars/bootstrap/js/bootstrap.min.js"></script>
 <title>Dashboard</title>
 </head>
 <body>
@@ -21,7 +19,7 @@
 			<a href="/clients/all" class="btn btn-secondary btn-lg">Client List</a>
 			<a href="/clients/new" class="btn btn-secondary btn-lg">New Client</a>
 			<button type="button" class="btn btn-secondary btn-lg">Booked Sits</button>
-			<button type="button" class="btn btn-secondary btn-lg">New Sit</button>
+			<a href="/sits/new" class="btn btn-secondary btn-lg">New Sit</a>
 		</div>
 		<div class="col-md-6">
 		

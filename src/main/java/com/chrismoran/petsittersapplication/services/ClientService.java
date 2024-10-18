@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+//import org.springframework.transaction.annotation.Transactional;
 
 import com.chrismoran.petsittersapplication.models.Client;
 import com.chrismoran.petsittersapplication.models.Pet;
@@ -58,7 +58,7 @@ public class ClientService {
 	}
 	
 	// Update client details only (nothing pet related)
-	@Transactional
+//	@Transactional
 	public void updateClientDetails(Client existingClient, Client updatedClient) {
 	    existingClient.setFirstName(updatedClient.getFirstName());
 	    existingClient.setLastName(updatedClient.getLastName());
@@ -69,17 +69,6 @@ public class ClientService {
 	    clientRepo.save(existingClient);
 	}
 	
-	// Update client pet count
-	@Transactional
-	public void updateClientPetCounts(Client client) {
-	    int dogCount = (int) client.getPets().stream().filter(p -> "dog".equals(p.getPetType())).count();
-	    int catCount = (int) client.getPets().stream().filter(p -> "cat".equals(p.getPetType())).count();
-	    
-	    client.setNumberOfDogs(dogCount);
-	    client.setNumberOfCats(catCount);
-	    clientRepo.save(client);
-	}
-
 	
 	// Delete by id
 	public void deleteClient(Long id) {

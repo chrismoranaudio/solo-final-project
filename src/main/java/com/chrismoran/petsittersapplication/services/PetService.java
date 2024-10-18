@@ -13,8 +13,6 @@ import com.chrismoran.petsittersapplication.models.PetDetailsForm;
 import com.chrismoran.petsittersapplication.repositories.ClientRepository;
 import com.chrismoran.petsittersapplication.repositories.PetRepository;
 
-import jakarta.persistence.EntityManager;
-import jakarta.transaction.Transactional;
 
 @Service
 public class PetService {
@@ -27,9 +25,7 @@ public class PetService {
 	
 	@Autowired
 	private ClientService clientService;
-	
-	@Autowired
-	private EntityManager entityManager;
+
 	
 	// Get all pets
 	public List<Pet> getAllPets() {
@@ -53,7 +49,6 @@ public class PetService {
 	}
 	
 	// Add pet to client
-	@Transactional
 	public void addPetToClient(Pet pet, Client client) {
 	    pet.setClient(client);
 	    petRepo.save(pet);
@@ -66,7 +61,6 @@ public class PetService {
 	}
 
 	// Remove a pet from a client
-	@Transactional
 	public void removePetFromClient(Pet pet, Client client) {
 	    client.getPets().remove(pet);
 	    if (pet.getPetType().equals("dog")) {
@@ -78,8 +72,7 @@ public class PetService {
 	    clientRepo.save(client);
 	}
 	
-	// Master Updater
-	@Transactional
+	// Update existing or add new pets
 	public void updateClientPets(Long clientId, PetDetailsForm form, boolean includeNewPets) {
 	    Client client = clientService.getOneClient(clientId);
 	    if (client == null) {
@@ -108,6 +101,7 @@ public class PetService {
 	            // Remove the pet if marked for deletion
 	            Pet pet = petRepo.findById(petId).orElse(null);
 	            if (pet != null) {
+	            	updatedPets.remove(pet); // Remove pet from the updated list
 	                petRepo.delete(pet);
 	            }
 	        }
@@ -154,15 +148,9 @@ public class PetService {
 	    // Save the client with all updates
 	    clientRepo.save(client);
 	    
-	    // Flush changes to the database
-	    entityManager.flush();
-	    
-	    // Refresh the client entity
-	    entityManager.refresh(client);
 	}
 
 	// Update client pet count
-	@Transactional
 	public void updateClientPetCounts(Client client) {
 	    int dogCount = (int) client.getPets().stream().filter(p -> "dog".equals(p.getPetType())).count();
 	    int catCount = (int) client.getPets().stream().filter(p -> "cat".equals(p.getPetType())).count();
@@ -191,159 +179,4 @@ public class PetService {
 	    newForm.setCatNotes(form.getCatNotes());
 	    updateClientPets(clientId, newForm, true);
 	}
-
-	
-	
-	// Update existing pets
-//	@Transactional
-//	public void updateExistingPets(Long clientId, PetDetailsForm form) {
-//	    Client client = clientService.getOneClient(clientId);
-//	    List<Pet> updatedPets = new ArrayList<>();
-//	    
-//	    for (int i = 0; i < form.getPetIds().size(); i++) {
-//	        Long petId = form.getPetIds().get(i);
-//	        String name = form.getPetNames().get(i);
-//	        String notes = form.getPetNotes().get(i);
-//	        String type = form.getPetTypes().get(i);
-//	        boolean toDelete = form.getPetsToDelete().contains(petId);
-//	        
-//	        if (!toDelete && name != null && !name.trim().isEmpty()) {
-//	            Pet pet = petRepo.findById(petId).orElse(new Pet());
-//                pet.setName(name);
-//                pet.setNotes(notes);
-//                pet.setPetType(type);
-//                pet.setClient(client);
-//                updatedPets.add(pet);
-//	            
-//	        }
-//	    }
-//	    
-//	    client.setPets(updatedPets);
-//	    client.setNumberOfDogs((int) updatedPets.stream().filter(p -> p.getPetType().equals("dog")).count());
-//	    client.setNumberOfCats((int) updatedPets.stream().filter(p -> p.getPetType().equals("cat")).count());
-//	    clientService.updateClient(client);
-//	}
-//
-//	@Transactional
-//	public void addNewPets(Long clientId, PetDetailsForm form) {
-//	    Client client = clientService.getOneClient(clientId);
-//	    List<Pet> newPets = new ArrayList<>();
-//	    
-//	    // Process dogs
-//	    for (int i = 0; i < form.getDogNames().size(); i++) {
-//	        String name = form.getDogNames().get(i);
-//	        String notes = form.getDogNotes().get(i);
-//	        if (name != null && !name.trim().isEmpty()) {
-//	            Pet dog = new Pet();
-//	            dog.setName(name);
-//	            dog.setNotes(notes);
-//	            dog.setPetType("dog");
-//	            dog.setClient(client);
-//	            newPets.add(dog);
-//	        }
-//	    }
-//	    
-//	    // Process cats
-//	    for (int i = 0; i < form.getCatNames().size(); i++) {
-//	        String name = form.getCatNames().get(i);
-//	        String notes = form.getCatNotes().get(i);
-//	        if (name != null && !name.trim().isEmpty()) {
-//	            Pet cat = new Pet();
-//	            cat.setName(name);
-//	            cat.setNotes(notes);
-//	            cat.setPetType("cat");
-//	            cat.setClient(client);
-//	            newPets.add(cat);
-//	        }
-//	    }
-//	    
-//	    client.getPets().addAll(newPets);
-//	    client.setNumberOfDogs(client.getNumberOfDogs() + (int) newPets.stream().filter(p -> p.getPetType().equals("dog")).count());
-//	    client.setNumberOfCats(client.getNumberOfCats() + (int) newPets.stream().filter(p -> p.getPetType().equals("cat")).count());
-//	    clientService.updateClient(client);
-//	}
-//	
-//	// Update client with list of new pets
-//	@Transactional
-//	public void updateClientPets(Client client, PetDetailsForm form) {
-//	    
-//		List<Pet> updatedPets = new ArrayList<>();
-//		
-//		// Process existing pets
-//		for(int i = 0; i < form.getPetIds().size(); i++) {
-//			Long petId = form.getPetIds().get(i);
-//			String name = form.getPetNames().get(i);
-//			String notes = form.getPetNotes().get(i);
-//			String type = form.getPetTypes().get(i);
-//			boolean toDelete = form.getPetsToDelete().contains(petId);
-//			
-//			if(!toDelete && name != null & !name.trim().isEmpty()) {
-//				
-//				Pet pet = petRepo.findById(petId).orElse(new Pet());
-//				pet.setName(name);
-//				pet.setNotes(notes);
-//				pet.setPetType(type);
-//				pet.setClient(client);
-//				updatedPets.add(pet);
-//			}
-//		}
-//		
-//		// Process new dogs
-//		for(int i = 0; i < form.getDogNames().size(); i++) {
-//			String name = form.getDogNames().get(i);
-//			String notes = form.getDogNotes().get(i);
-//			if(name != null && !name.trim().isEmpty()) {
-//				Pet dog = new Pet();
-//				dog.setName(name);
-//				dog.setNotes(notes);
-//				dog.setPetType("dog");
-//				dog.setClient(client);
-//				updatedPets.add(dog);
-//			}
-//		}
-//		
-//		// Process new cats
-//		for(int i = 0; i < form.getCatNames().size(); i++) {
-//			String name = form.getCatNames().get(i);
-//			String notes = form.getCatNotes().get(i);
-//			if(name != null && !name.trim().isEmpty()) {
-//				Pet cat = new Pet();
-//				cat.setName(name);
-//				cat.setNotes(notes);
-//				cat.setPetType("cat");
-//				cat.setClient(client);
-//				updatedPets.add(cat);
-//			}
-//		}
-//		
-//		// Remove all existing pets and add updated pets
-//        petRepo.deleteAll(client.getPets());
-//        client.setPets(updatedPets);
-//        petRepo.saveAll(updatedPets);
-//        
-//        // Update client's pet counts
-//        client.setNumberOfDogs((int) updatedPets.stream().filter(p -> p.getPetType().equals("dog")).count());
-//        client.setNumberOfCats((int) updatedPets.stream().filter(p -> p.getPetType().equals("cat")).count());
-//        clientRepo.save(client);
-//    }
-	
-	// Save all pets
-//	public List<Pet> saveAllPets(List<Pet> pets) {
-//		return (List<Pet>) petRepo.saveAll(pets);
-//	}
-//	
-//	// Update pet
-//	public Pet updatePet(Pet petToEdit) {
-//		return petRepo.save(petToEdit);
-//	}
-//	
-//	// Delete by id
-//	public void deletePet(Long id) {
-//		petRepo.deleteById(id);
-//	}
-//	
-//	// Delete pet object
-//	public void deletePet(Pet petToDelete) {
-//		petRepo.delete(petToDelete);
-//	}
 }
