@@ -72,17 +72,15 @@ public class PetController {
 	// Show pet details form
 	@GetMapping("/pets/detailsForm")
 	public String showPetDetailsForm(Model model) {
-	    // Retrieve the number of dogs, cats, and client ID from the session
+		
 	    Integer numberOfDogs = (Integer) session.getAttribute("numberOfDogs");
 	    Integer numberOfCats = (Integer) session.getAttribute("numberOfCats");
 	    Long clientId = (Long) session.getAttribute("clientId");
 
-	    // Add these values to the model
 	    model.addAttribute("numberOfDogs", numberOfDogs);
 	    model.addAttribute("numberOfCats", numberOfCats);
 	    model.addAttribute("clientId", clientId);
 
-	    // Add an empty PetDetailsForm to bind the form data
 	    model.addAttribute("petDetailsForm", new PetDetailsForm());
 
 	    return "petDetailsForm.jsp"; 
@@ -190,7 +188,7 @@ public class PetController {
 	@PostMapping("/clients/{clientId}/pets/add-details")
 	public String addNewPets(
 			@PathVariable Long clientId, 
-			@Valid @ModelAttribute PetDetailsForm form,
+			@Valid @ModelAttribute("petDetailsForm") PetDetailsForm form,
 			BindingResult result) {
 		if(result.hasErrors()) {
 			return "redirect:/clients/{clientId}/pets/add-details";

@@ -18,7 +18,7 @@
 		<div class="col-md-6 d-grid gap-3">
 			<a href="/clients/all" class="btn btn-secondary btn-lg">Client List</a>
 			<a href="/clients/new" class="btn btn-secondary btn-lg">New Client</a>
-			<button type="button" class="btn btn-secondary btn-lg">Booked Sits</button>
+			<a href="sits/all" class="btn btn-secondary btn-lg">Booked Sits</a>
 			<a href="/sits/new" class="btn btn-secondary btn-lg">New Sit</a>
 		</div>
 		<div class="col-md-6">

@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-//import org.springframework.transaction.annotation.Transactional;
 
 import com.chrismoran.petsittersapplication.models.Client;
 import com.chrismoran.petsittersapplication.models.Pet;
@@ -58,7 +57,6 @@ public class ClientService {
 	}
 	
 	// Update client details only (nothing pet related)
-//	@Transactional
 	public void updateClientDetails(Client existingClient, Client updatedClient) {
 	    existingClient.setFirstName(updatedClient.getFirstName());
 	    existingClient.setLastName(updatedClient.getLastName());

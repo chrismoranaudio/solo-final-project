@@ -1,5 +1,6 @@
 package com.chrismoran.petsittersapplication.controllers;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +41,11 @@ public class SitController {
 		if(userId == null) {
 			return "redirect:/";
 		}
-		model.addAttribute("sits", sitService.getAllSits());
+		List <Sit> sits = sitService.getAllSits();
+		
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd");
+		model.addAttribute("dateFormatter", formatter);
+		model.addAttribute("sits", sits);
 		return "allSits.jsp";
 	}
 	
@@ -79,7 +84,7 @@ public class SitController {
 			return "newSit.jsp";
 		}
 		sitService.createSit(newSit);
-		return "redirect:/home";
+		return "redirect:/sits/all";
 	}
 	
 	// Show the edit sit form
