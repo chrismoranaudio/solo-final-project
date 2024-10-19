@@ -13,11 +13,11 @@
 <body>
 <div class="container">
 	<div class="d-flex justify-content-between align-items-center my-5">
-		<h1>Edit Client</h1>
+		<h1>Edit <c:out value="${client.firstName} ${client.lastName}"/></h1>
 		<div>
-			<a href="/home" class="btn btn-link">dashboard</a>
+			<a href="/home" class="btn btn-secondary">Dashboard</a>
 			<form action="/logout" method="POST" class="d-inline">
-				<input type="submit" value="log out" class="btn btn-link"/>
+				<input type="submit" value="Log out" class="btn btn-danger ms-2"/>
 			</form>
 		</div>
 	</div>
@@ -56,6 +56,12 @@
         </div>
         <button type="submit" class="btn btn-primary">Update Client</button>
     </form:form>
+    <form action="/clients/${client.id}/delete" method="POST" style="display: inline;">
+        <input type="hidden" name="_method" value="delete"/>
+        <button type="submit" class="btn btn-danger mt-2"
+            onclick="return confirm('Are you sure you want to delete this client?');">Delete Client
+        </button>
+    </form>
 </div>
 </body>
 </html>

@@ -175,14 +175,33 @@ public class PetController {
 
 	@PostMapping("/clients/{clientId}/pets/add")
 	public String processAddPetForm(@PathVariable Long clientId, 
-			@RequestParam int numberOfDogs, 
-			@RequestParam int numberOfCats, 
+			@RequestParam Integer numberOfDogs, 
+			@RequestParam Integer numberOfCats, 
 			Model model) {
 	    model.addAttribute("clientId", clientId);
 	    model.addAttribute("numberOfDogs", numberOfDogs);
 	    model.addAttribute("numberOfCats", numberOfCats);
 	    model.addAttribute("petDetailsForm", new PetDetailsForm());
-	    return "newPetDetails.jsp";
+	    
+	    return "redirect:/clients/"+clientId+"/pets/add-details?numberOfDogs="+numberOfDogs+"&numberOfCats="+numberOfCats;
+	}
+	
+	@GetMapping("/clients/{clientId}/pets/add-details")
+	public String addNewPetDetailsForm(@PathVariable Long clientId,
+			@RequestParam("numberOfDogs") Integer numberOfDogs,
+			@RequestParam("numberOfCats") Integer numberOfCats,
+			Model model) {
+		Client client = clientService.getOneClient(clientId);
+		if(client == null) {
+			return "redirect:/clients/all";
+		}
+		
+		model.addAttribute("clientId", clientId);
+		model.addAttribute("numberOfDogs", numberOfDogs);
+		model.addAttribute("numberOfCats", numberOfCats);
+		model.addAttribute("petDetailsForm", new PetDetailsForm());
+		
+		return "newPetDetails.jsp";
 	}
 	
 	@PostMapping("/clients/{clientId}/pets/add-details")
@@ -191,7 +210,7 @@ public class PetController {
 			@Valid @ModelAttribute("petDetailsForm") PetDetailsForm form,
 			BindingResult result) {
 		if(result.hasErrors()) {
-			return "redirect:/clients/{clientId}/pets/add-details";
+			return "newPetDetails.jsp";
 		}
 		
 	    petService.addNewPets(clientId, form);

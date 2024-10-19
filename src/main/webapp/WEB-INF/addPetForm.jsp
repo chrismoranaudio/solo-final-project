@@ -22,7 +22,7 @@
 		</div>
 	</div>
     <form action="/clients/${clientId}/pets/add" method="POST">
-    <input type="hidden" name="clientIt" value="${clientId}" />
+    <input type="hidden" name="clientId" value="${clientId}" />
         <div class="mb-3">
             <label>I'm adding 
                 <select name="numberOfDogs" class="form-select d-inline w-auto">

@@ -21,6 +21,7 @@
                 <div class="mb-3">
                     <form:label path="dogNames[${index}]">Dog #${index + 1}'s Name:</form:label>
                     <form:input path="dogNames[${index}]" class="form-control"/>
+                    <form:errors path="dogNames[${index}]" class="text-danger"/>
                 </div>
                 <div class="mb-3">
                     <form:label path="dogNotes[${index}]">Dog #${index + 1}'s Notes:</form:label>
@@ -35,6 +36,7 @@
                 <div class="mb-3">
                     <form:label path="catNames[${index}]">Cat #${index + 1}'s Name:</form:label>
                     <form:input path="catNames[${index}]" class="form-control"/>
+                    <form:errors path="catNames[${index}]" class="text-danger"/>
                 </div>
                 <div class="mb-3">
                     <form:label path="catNotes[${index}]">Cat #${index + 1}'s Notes:</form:label>

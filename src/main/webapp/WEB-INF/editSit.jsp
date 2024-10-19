@@ -12,7 +12,15 @@
 </head>
 <body>
 	<div class="container">
-		<h1 class="my-5">Edit Sit</h1>
+		<div class="d-flex justify-content-between align-items-center my-5">
+			<h1>Edit <c:out value="${editSit.client.firstName}"/>'s Sit</h1>
+			<div>
+				<a href="/home" class="btn btn-secondary">Dashboard</a>
+				<form action="/logout" method="POST" class="d-inline">
+					<input type="submit" value="Log out" class="btn btn-danger ms-2"/>
+				</form>
+			</div>
+		</div>
 	    <form:form action="/sits/${editSit.id}/update" method="POST" modelAttribute="editSit">
 	    <input type="hidden" name="_method" value="put"/>
   	        <div class="mb-3">
@@ -67,6 +75,12 @@
 	        </div>
 	        <button type="submit" class="btn btn-primary">Update Sit</button>
 	    </form:form>	
+	    <form action="/sits/${editSit.id}/delete" method="POST" style="display: inline;">
+        <input type="hidden" name="_method" value="delete"/>
+           	<button type="submit" class="btn btn-danger mt-2"
+           		onclick="return confirm('Are you sure you want to delete this sit?');">Delete Sit
+          	</button>
+         </form>
 	</div>
 </body>
 </html>

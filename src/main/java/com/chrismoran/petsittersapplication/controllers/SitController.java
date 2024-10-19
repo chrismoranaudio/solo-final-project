@@ -162,13 +162,3 @@ public class SitController {
 		return "redirect:/sits/all";
 	}
 }
-
-
-
-
-
-
-
-
-
-

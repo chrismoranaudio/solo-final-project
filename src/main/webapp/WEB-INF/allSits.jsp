@@ -59,7 +59,7 @@
                         <td>${dateFormatter.format(sit.endDate)}</td>
                         <td>${sit.finalVisit}</td>
                         <td>
-                            <a href="/sits/${sit.id}/edit" class="btn btn-primary">Edit Sit</a> | 
+                            <a href="/sits/${sit.id}/edit" class="btn btn-primary">Edit Sit</a>  
                             <form action="/sits/${sit.id}/delete" method="POST" style="display: inline;">
 				            	<input type="hidden" name="_method" value="delete"/>
 				            	<button type="submit" class="btn btn-danger"
