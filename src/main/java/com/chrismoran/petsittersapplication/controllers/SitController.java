@@ -87,6 +87,12 @@ public class SitController {
 		if(result.hasErrors()) {
 			List<Client> clients = clientService.getAllClients();
 			model.addAttribute("clients", clients);
+			model.addAttribute("newSit", newSit);
+			
+			if(newSit.getClient() != null && newSit.getClient().getId() != null) {
+				Client selectedClient = clientService.getOneClient(newSit.getClient().getId());
+				model.addAttribute("selectedClient", selectedClient);
+			}
 			return "newSit.jsp";
 		}
 		sitService.createSit(newSit);
@@ -153,7 +159,7 @@ public class SitController {
 			return "redirect:/home";
 		}
 		sitService.deleteSit(id);
-		return "redirect:/home";
+		return "redirect:/sits/all";
 	}
 }
 

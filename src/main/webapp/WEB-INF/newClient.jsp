@@ -13,12 +13,12 @@
 </head>
 <body>
 <div class="container">
-	<div class="d-flex justify-content-between align-items-center mt-5 mb-3">
+	<div class="d-flex justify-content-between align-items-center my-5">
 		<h1>New Client</h1>
 		<div>
-			<a href="/home" class="btn btn-link">dashboard</a>
+			<a href="/home" class="btn btn-secondary">Dashboard</a>
 			<form action="/logout" method="POST" class="d-inline">
-				<input type="submit" value="log out" class="btn btn-link"/>
+				<input type="submit" value="Log out" class="btn btn-danger ml-2"/>
 			</form>
 		</div>
 	</div>
@@ -100,7 +100,7 @@
         <div class="col-md-5">
             <div class="mb-3 row">
                 <div class="col-md-8">
-                	<input type="submit" class="btn btn-primary btn-lg" value="How Many Pets We Got?!"/>   
+                	<input type="submit" class="btn btn-primary btn-lg" value="How Many Fur-Babies!?!"/>   
                 </div>
             </div>
         </div>

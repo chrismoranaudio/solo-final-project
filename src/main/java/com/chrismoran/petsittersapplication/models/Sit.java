@@ -46,9 +46,11 @@ public class Sit {
         this.updatedAt = new Date();
     }
     
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @NotNull(message="Start date is required")
     private LocalDate startDate;
     
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @NotNull(message="End date is required")
     private LocalDate endDate;
     
@@ -60,8 +62,12 @@ public class Sit {
     private String notes;
     
     @Enumerated(EnumType.STRING)
+    @NotNull(message="First visit is required")
+    private Visit firstVisit;
+    
+    @Enumerated(EnumType.STRING)
     @NotNull(message="Final visit is required")
-    private FinalVisit finalVisit;
+    private Visit finalVisit;
     
     @ManyToOne
     @JoinColumn(name="client_id", nullable=false)
@@ -73,16 +79,17 @@ public class Sit {
 	public Sit(@NotNull(message = "Start date is required") LocalDate startDate,
 			@NotNull(message = "End date is required") LocalDate endDate,
 			@NotNull(message = "Daily visits is required") @Min(value = 1, message = "At least 1 daily visit is required") @Max(value = 4, message = "Maximum of 4 daily visits are allowed") Integer dailyVisits,
-			String notes, @NotNull(message = "Final visit is required") FinalVisit finalVisit, Client client) {
+			String notes, @NotNull(message = "First visit is required") Visit firstVisit,
+			@NotNull(message = "Final visit is required") Visit finalVisit, Client client) {
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.dailyVisits = dailyVisits;
 		this.notes = notes;
+		this.firstVisit = firstVisit;
 		this.finalVisit = finalVisit;
 		this.client = client;
 	}
 
-	// Getters & Setters
 	public Long getId() {
 		return id;
 	}
@@ -139,11 +146,19 @@ public class Sit {
 		this.notes = notes;
 	}
 
-	public FinalVisit getFinalVisit() {
+	public Visit getFirstVisit() {
+		return firstVisit;
+	}
+
+	public void setFirstVisit(Visit firstVisit) {
+		this.firstVisit = firstVisit;
+	}
+
+	public Visit getFinalVisit() {
 		return finalVisit;
 	}
 
-	public void setFinalVisit(FinalVisit finalVisit) {
+	public void setFinalVisit(Visit finalVisit) {
 		this.finalVisit = finalVisit;
 	}
 
@@ -154,9 +169,9 @@ public class Sit {
 	public void setClient(Client client) {
 		this.client = client;
 	}
-     
+ 
 }
 
-enum FinalVisit {
-	MORNING, MID_DAY, DINNER, BEDTIME
+enum Visit {
+	Morning, Midday, Dinner, Bedtime
 }

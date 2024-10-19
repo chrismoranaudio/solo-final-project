@@ -10,16 +10,18 @@
 </head>
 <body>
 <div class="container">
-	<h1 class="my-5">Welcome, <c:out value="${loggedInUser.firstName}"/>!</h1>
-	<form action="/logout" method="POST">
-		<input type="submit" value="log out" class="btn btn-link mb-5"/>
-	</form>
-	<div class="row">
+	<div class="d-flex justify-content-between align-items-center my-5">
+		<h1>Welcome, <c:out value="${loggedInUser.firstName}"/>!</h1>
+		<form action="/logout" method="POST" class="d-inline">
+			<input type="submit" value="Log out" class="btn btn-danger ml-2"/>
+		</form>
+	</div>
+	<div class="row ms-5">
 		<div class="col-md-6 d-grid gap-3">
-			<a href="/clients/all" class="btn btn-secondary btn-lg">Client List</a>
-			<a href="/clients/new" class="btn btn-secondary btn-lg">New Client</a>
-			<a href="sits/all" class="btn btn-secondary btn-lg">Booked Sits</a>
-			<a href="/sits/new" class="btn btn-secondary btn-lg">New Sit</a>
+			<a href="/clients/all" class="btn btn-primary btn-lg">Client List</a>
+			<a href="/clients/new" class="btn btn-success btn-lg">New Client</a>
+			<a href="sits/all" class="btn btn-primary btn-lg">Booked Sits</a>
+			<a href="/sits/new" class="btn btn-success btn-lg">New Sit</a>
 		</div>
 		<div class="col-md-6">
 		

@@ -12,26 +12,26 @@
 </head>
 <body>
 <div class="container">
-	<h1>Please Select Number of Pets!</h1>
+	<h1 class="my-5">Please Select Number of Pets!</h1>
 	<form action="/pets/numberSelection" method="POST">
 	<input type="hidden" name="clientId" value="${clientId}" />
-	    <div>
-	        <label>I have </label>
-	        <select name="numberOfDogs">
-	            <c:forEach var="option" items="${dogOptions}">
-	                <option value="${option}">${option}</option>
-	            </c:forEach>
-	        </select>
-	        <label> dog(s).</label>
+	    <div class="mb-3">
+	        <label>They have 
+		        <select name="numberOfDogs" class="form-select d-inline w-auto">
+		            <c:forEach var="option" items="${dogOptions}">
+		                <option value="${option}">${option}</option>
+		            </c:forEach>
+		        </select> dog(s)
+	        </label>
 	    </div>
-	    <div>
-	        <label>I have </label>
-	        <select name="numberOfCats">
+	    <div class="mb-3">
+	        <label>They have 
+	        <select name="numberOfCats" class="form-select d-inline w-auto">
 	            <c:forEach var="option" items="${catOptions}">
 	                <option value="${option}">${option}</option>
 	            </c:forEach>
-	        </select>
-	        <label> cat(s).</label>
+	        </select> cat(s)
+	        </label> 
 	    </div>
 	    <input type="submit" value="Next" class="btn btn-primary"/>
 	</form>

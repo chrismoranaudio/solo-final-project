@@ -40,6 +40,11 @@ public class ClientController {
 	// Display one client
 	@GetMapping("/clients/{clientId}/view")
 	public String viewClient(@PathVariable Long clientId, Model model) {
+		Long userId = (Long) session.getAttribute("userId");
+		if(userId == null) {
+			return "redirect:/";
+		}
+		
 		Client client = clientService.getOneClient(clientId);
 		if(client == null) {
 			return "redirect:/clients/all";
@@ -81,7 +86,12 @@ public class ClientController {
 	// Show the edit client form
 	@GetMapping("/clients/{id}/edit")
 	public String showEditClientForm(@PathVariable("id") Long id, Model model) {
-	    Client client = clientService.getOneClient(id);
+		Long userId = (Long) session.getAttribute("userId");
+		if(userId == null) {
+			return "redirect:/";
+		}
+		
+		Client client = clientService.getOneClient(id);
 	    if (client == null) {
 	        return "redirect:/clients/all";
 	    }
@@ -90,7 +100,15 @@ public class ClientController {
 	}
 
 	@PutMapping("/clients/{id}/edit")
-	public String processEditClientForm(@PathVariable("id") Long id, @Valid @ModelAttribute("client") Client updatedClient, BindingResult result) {
+	public String processEditClientForm(
+			@PathVariable("id") Long id, 
+			@Valid @ModelAttribute("client") Client updatedClient, 
+			BindingResult result) {
+		Long userId = (Long) session.getAttribute("userId");
+		if(userId == null) {
+			return "redirect:/";
+		}
+		
 	    if (result.hasErrors()) {
 	        return "editClient.jsp";
 	    }
@@ -116,7 +134,7 @@ public class ClientController {
 			return "redirect:/home";
 		}
 		clientService.deleteClient(id);
-		return "redirect:/home";
+		return "redirect:/clients/all";
 	}
 }
 
