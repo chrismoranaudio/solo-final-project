@@ -57,7 +57,7 @@
                 <div class="col-md-8">
                     <div class="input-group">
                         <span class="input-group-text">$</span>
-                        <form:input path="priceQuoted" class="form-control"/>
+                        <form:input path="priceQuoted" type="number" class="form-control"/>
                     </div>
                     <form:errors path="priceQuoted" class="text-danger"/>
                 </div>

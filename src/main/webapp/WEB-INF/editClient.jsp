@@ -56,7 +56,7 @@
                 <div class="col-md-8">
                     <div class="input-group">
                         <span class="input-group-text">$</span>
-                        <form:input path="priceQuoted" class="form-control"/>
+                        <form:input path="priceQuoted" type="number" class="form-control"/>
                     </div>
                     <form:errors path="priceQuoted" class="text-danger"/>
                 </div>
@@ -106,46 +106,6 @@
             onclick="return confirm('Are you sure you want to delete this client?');">Delete Client
         </button>
     </form>
-	<%-- <form:form action="/clients/${client.id}/edit" method="POST" modelAttribute="client">
-	<input type="hidden" name="_method" value="put"/>
-        <div class="mb-3">
-            <form:label path="firstName" class="form-label">First Name:</form:label>
-            <form:input path="firstName" class="form-control"/>
-            <form:errors path="firstName" class="text-danger"/>
-        </div>
-        <div class="mb-3">
-            <form:label path="lastName" class="form-label">Last Name:</form:label>
-            <form:input path="lastName" class="form-control"/>
-            <form:errors path="lastName" class="text-danger"/>
-        </div>
-        <div class="mb-3">
-            <form:label path="address" class="form-label">Address:</form:label>
-            <form:textarea path="address" class="form-control"/>
-            <form:errors path="address" class="text-danger"/>
-        </div>
-        <div class="mb-3">
-            <form:label path="phoneNumber" class="form-label">Phone Number:</form:label>
-            <form:input path="phoneNumber" class="form-control"/>
-            <form:errors path="phoneNumber" class="text-danger"/>
-        </div>
-        <div class="mb-3">
-            <form:label path="priceQuoted" class="form-label">Price Quoted:</form:label>
-            <form:input path="priceQuoted" class="form-control"/>
-            <form:errors path="priceQuoted" class="text-danger"/>
-        </div>
-        <div class="mb-3">
-            <form:label path="dailyVisits" class="form-label">Daily Visits:</form:label>
-            <form:input path="dailyVisits" type="number" class="form-control"/>
-            <form:errors path="dailyVisits" class="text-danger"/>
-        </div>
-        <button type="submit" class="btn btn-primary">Update Client</button>
-    </form:form>
-    <form action="/clients/${client.id}/delete" method="POST" style="display: inline;">
-        <input type="hidden" name="_method" value="delete"/>
-        <button type="submit" class="btn btn-danger mt-2"
-            onclick="return confirm('Are you sure you want to delete this client?');">Delete Client
-        </button>
-    </form> --%>
 </div>
 </body>
 </html>

@@ -15,6 +15,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -59,9 +60,14 @@ public class Client {
     @Pattern(regexp = "^(\\+0?1\\s)?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4}$", message="Please enter a valid phone number")
     private String phoneNumber;
     
-    @NotNull(message="Price quoted is required")
-    @Min(value=0, message="Price quoted must be a positive number")
-    private Double priceQuoted;
+    @NotNull(message = "Price quoted is required")
+    @Min(value = 0, message = "Price quoted must be a positive number")
+    @Digits(integer = 10, fraction = 0, message = "Price quoted must be a valid whole number")
+    private Integer priceQuoted;
+    
+//    @NotNull(message="Price quoted is required")
+//    @Min(value=0, message="Price quoted must be a positive number")
+//    private Double priceQuoted;
     
     @NotNull(message="Please enter number of daily visits required")
     @Min(value=1, message="At least 1 daily visit is required")
@@ -85,7 +91,7 @@ public class Client {
 			@NotBlank(message = "Last name is required") String lastName,
 			@NotBlank(message = "Address is required") String address,
 			@NotBlank(message = "Phone number is required") @Pattern(regexp = "^(\\+0?1\\s)?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4}$", message = "Please enter a valid phone number") String phoneNumber,
-			@NotNull(message = "Price quoted is required") @Min(value = 0, message = "Price quoted must be a positive number") Double priceQuoted,
+			@NotNull(message = "Price quoted is required") @Min(value = 0, message = "Price quoted must be a positive number") @Digits(integer = 10, fraction = 0, message = "Price quoted must be a valid whole number") Integer priceQuoted,
 			@NotNull(message = "Please enter number of daily visits required") @Min(value = 1, message = "At least 1 daily visit is required") @Max(value = 4, message = "Maximum 4 dailys visits are allowed") Integer dailyVisits,
 			Integer numberOfDogs, Integer numberOfCats, List<Pet> pets, List<Sit> sits) {
 		this.firstName = firstName;
@@ -156,11 +162,11 @@ public class Client {
 		this.phoneNumber = phoneNumber;
 	}
 
-	public Double getPriceQuoted() {
+	public Integer getPriceQuoted() {
 		return priceQuoted;
 	}
 
-	public void setPriceQuoted(Double priceQuoted) {
+	public void setPriceQuoted(Integer priceQuoted) {
 		this.priceQuoted = priceQuoted;
 	}
 
@@ -203,4 +209,6 @@ public class Client {
 	public void setSits(List<Sit> sits) {
 		this.sits = sits;
 	}
+
+	
 }

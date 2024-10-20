@@ -1,5 +1,6 @@
 package com.chrismoran.petsittersapplication.controllers;
 
+import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -57,10 +58,16 @@ public class ClientController {
 		if(client == null) {
 			return "redirect:/clients/all";
 		}
-		
+		// For formatting the "Sit" date
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd");
 		model.addAttribute("dateFormatter", formatter);
 		
+		// For formatting the "Created At" date
+		SimpleDateFormat createdAt = new SimpleDateFormat("MMM dd, yyyy");
+		String formattedCreatedAt = createdAt.format(client.getCreatedAt());
+		model.addAttribute("formattedCreatedAt", formattedCreatedAt);
+		
+		// For formatting the phone number
 		String formattedPhoneNumber = formatPhoneNumber(client.getPhoneNumber());
 		model.addAttribute("formattedPhoneNumber", formattedPhoneNumber);
 		

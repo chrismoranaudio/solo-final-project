@@ -36,6 +36,7 @@
                     <p class="card-text"><strong>Phone Number:</strong> ${formattedPhoneNumber}</p>
                     <p class="card-text"><strong>Price Quoted:</strong> $<fmt:formatNumber value="${client.priceQuoted}" maxFractionDigits="0"/></p>
                     <p class="card-text"><strong>Daily Visits Required:</strong> ${client.dailyVisits}</p>
+                    <p class="card-text"><strong>Client Since:</strong> ${formattedCreatedAt}</p>
                 </div>
             </div>
             <div class="mt-2">
