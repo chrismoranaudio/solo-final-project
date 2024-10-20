@@ -16,9 +16,9 @@ public class SitService {
 	@Autowired
 	private SitRepository sitRepo;
 	
-	// Get all sits
+	// Get all sits (sorted by Start Date)
 	public List<Sit> getAllSits() {
-		return sitRepo.findAll();
+		return sitRepo.findAllByOrderByStartDateAsc();
 	}
 	
 	// Create a new sit

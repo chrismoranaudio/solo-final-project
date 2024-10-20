@@ -3,17 +3,19 @@ package com.chrismoran.petsittersapplication.models;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.validation.constraints.NotBlank;
+
 public class PetDetailsForm {
 
 	// For adding new pets
-	private List<String> dogNames = new ArrayList<>();
+	private List<@NotBlank(message="Dog name cannot be blank") String> dogNames = new ArrayList<>();
     private List<String> dogNotes = new ArrayList<>();
-    private List<String> catNames = new ArrayList<>();
+    private List<@NotBlank(message="Cat name cannot be blank") String> catNames = new ArrayList<>();
     private List<String> catNotes = new ArrayList<>();
     
     // For editing existing pets
     private List<Long> petIds = new ArrayList<>();
-    private List<String> petNames = new ArrayList<>();
+    private List<@NotBlank(message="Pet name cannot be blank") String> petNames = new ArrayList<>();
     private List<String> petNotes = new ArrayList<>();
     private List<String> petTypes = new ArrayList<>();
     private List<Long> petsToDelete = new ArrayList<>();
@@ -92,8 +94,5 @@ public class PetDetailsForm {
 	public void setPetsToDelete(List<Long> petsToDelete) {
 		this.petsToDelete = petsToDelete;
 	}
-
-    
-
     
 }

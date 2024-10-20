@@ -38,6 +38,10 @@ public class PetController {
 	// Show number of pets selection form
 	@GetMapping("/pets/numberSelection")
 	public String showPetNumberForm(@RequestParam("clientId") Long clientId, Model model) {
+		Long userId = (Long) session.getAttribute("userId");
+		if(userId == null) {
+			return "redirect:/";
+		}
 	    
 	    List<Integer> dogOptions = new ArrayList<>();
 	    List<Integer> catOptions = new ArrayList<>();
@@ -60,7 +64,11 @@ public class PetController {
 	        @RequestParam("numberOfDogs") Integer numberOfDogs,
 	        @RequestParam("numberOfCats") Integer numberOfCats,
 	        @RequestParam("clientId") Long clientId) {
-
+		Long userId = (Long) session.getAttribute("userId");
+		if(userId == null) {
+			return "redirect:/";
+		}
+		
 	    // Store the number of dogs and cats in the session
 	    session.setAttribute("numberOfDogs", numberOfDogs);
 	    session.setAttribute("numberOfCats", numberOfCats);
@@ -72,6 +80,10 @@ public class PetController {
 	// Show pet details form
 	@GetMapping("/pets/detailsForm")
 	public String showPetDetailsForm(Model model) {
+		Long userId = (Long) session.getAttribute("userId");
+		if(userId == null) {
+			return "redirect:/";
+		}
 		
 	    Integer numberOfDogs = (Integer) session.getAttribute("numberOfDogs");
 	    Integer numberOfCats = (Integer) session.getAttribute("numberOfCats");
@@ -91,11 +103,16 @@ public class PetController {
 			@RequestParam("clientId") Long clientId,
 			@Valid @ModelAttribute("petDetailsForm") PetDetailsForm form,
 			BindingResult result, Model model) {
+		Long userId = (Long) session.getAttribute("userId");
+		if(userId == null) {
+			return "redirect:/";
+		}
 		
 		if(result.hasErrors()) {
 			model.addAttribute("numberOfDogs", form.getDogNames().size());
 		    model.addAttribute("numberOfCats", form.getCatNames().size());
 		    model.addAttribute("clientId", clientId);
+		    return "petDetailsForm.jsp";
 		}
 		
 		Client client = clientService.getOneClient(clientId);
@@ -113,6 +130,10 @@ public class PetController {
 	@GetMapping("/clients/{clientId}/pets/edit")
 	public String showPetEditOptions(
 			@PathVariable Long clientId, Model model) {
+		Long userId = (Long) session.getAttribute("userId");
+		if(userId == null) {
+			return "redirect:/";
+		}
 		
 		model.addAttribute("clientId", clientId);
 		
@@ -123,6 +144,10 @@ public class PetController {
 	@GetMapping("/clients/{clientId}/pets/edit-existing")
 	public String showEditExistingPetsForm(
 			@PathVariable Long clientId, Model model) {
+		Long userId = (Long) session.getAttribute("userId");
+		if(userId == null) {
+			return "redirect:/";
+		}
 		
 		Client client = clientService.getOneClient(clientId);
 		if(client == null) {
@@ -148,6 +173,10 @@ public class PetController {
 			@PathVariable Long clientId, 
 			@Valid @ModelAttribute("petDetailsForm") PetDetailsForm form,
 			BindingResult result, Model model) {
+		Long userId = (Long) session.getAttribute("userId");
+		if(userId == null) {
+			return "redirect:/";
+		}
 		
 		if(result.hasErrors()) {
 			Client client = clientService.getOneClient(clientId);
@@ -163,6 +192,11 @@ public class PetController {
 	
 	@GetMapping("/clients/{clientId}/pets/add")
 	public String showAddPetForm(@PathVariable Long clientId, Model model) {
+		Long userId = (Long) session.getAttribute("userId");
+		if(userId == null) {
+			return "redirect:/";
+		}
+		
 	    model.addAttribute("clientId", clientId);
 	    List<Integer> petOptions = new ArrayList<>();
 
@@ -178,6 +212,10 @@ public class PetController {
 			@RequestParam Integer numberOfDogs, 
 			@RequestParam Integer numberOfCats, 
 			Model model) {
+		Long userId = (Long) session.getAttribute("userId");
+		if(userId == null) {
+			return "redirect:/";
+		}
 	    model.addAttribute("clientId", clientId);
 	    model.addAttribute("numberOfDogs", numberOfDogs);
 	    model.addAttribute("numberOfCats", numberOfCats);
@@ -191,6 +229,10 @@ public class PetController {
 			@RequestParam("numberOfDogs") Integer numberOfDogs,
 			@RequestParam("numberOfCats") Integer numberOfCats,
 			Model model) {
+		Long userId = (Long) session.getAttribute("userId");
+		if(userId == null) {
+			return "redirect:/";
+		}
 		Client client = clientService.getOneClient(clientId);
 		if(client == null) {
 			return "redirect:/clients/all";
@@ -208,8 +250,18 @@ public class PetController {
 	public String addNewPets(
 			@PathVariable Long clientId, 
 			@Valid @ModelAttribute("petDetailsForm") PetDetailsForm form,
-			BindingResult result) {
+			BindingResult result,
+			@RequestParam("numberOfDogs") Integer numberOfDogs,
+			@RequestParam("numberOfCats") Integer numberOfCats,
+			Model model) {
+		Long userId = (Long) session.getAttribute("userId");
+		if(userId == null) {
+			return "redirect:/";
+		}
 		if(result.hasErrors()) {
+			model.addAttribute("numberOfDogs", numberOfDogs);
+			model.addAttribute("numberOfCats", numberOfCats);
+			model.addAttribute("clientId", clientId);
 			return "newPetDetails.jsp";
 		}
 		
@@ -218,15 +270,3 @@ public class PetController {
 	}
 
 }
-
-
-
-
-
-
-
-
-
-
-
-

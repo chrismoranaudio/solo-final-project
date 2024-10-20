@@ -61,10 +61,18 @@ public class ClientController {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd");
 		model.addAttribute("dateFormatter", formatter);
 		
+		String formattedPhoneNumber = formatPhoneNumber(client.getPhoneNumber());
+		model.addAttribute("formattedPhoneNumber", formattedPhoneNumber);
+		
 		List<Sit> currentSits = sitService.findSitsByClient(client);
 		model.addAttribute("currentSits", currentSits);
 		model.addAttribute("client", client);
 		return "viewClient.jsp";
+	}
+	
+	private String formatPhoneNumber(String phoneNumber) {
+		String cleaned = phoneNumber.replaceAll("[^\\d]", "");
+		return cleaned.replaceFirst("(\\d{3})(\\d{3})(\\d{4})", "($1) $2-$3");
 	}
 	
 	// Show the new client form
@@ -151,19 +159,3 @@ public class ClientController {
 		return "redirect:/clients/all";
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

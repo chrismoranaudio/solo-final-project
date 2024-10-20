@@ -14,4 +14,6 @@ public interface SitRepository extends CrudRepository<Sit, Long> {
 	List<Sit> findAll();
 	
 	List<Sit> findByClient(Client client);
+	
+	List<Sit> findAllByOrderByStartDateAsc();
 }

@@ -8,11 +8,25 @@
 <head>
 <meta charset="UTF-8">
 <link rel="stylesheet" href="/webjars/bootstrap/css/bootstrap.min.css" />
+<link rel="stylesheet" href="/css/styles.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 <title>Pet Edit Options</title>
 </head>
 <body>
 <div class="container">
-    <h1 class="my-5">Pet Edit Options</h1>
+    <div class="d-flex justify-content-between align-items-center my-5">
+			<h1>Pet Edit Options</h1>
+			<div>
+				<a href="/home" class="btn btn-secondary">
+    				<i class="fas fa-home"></i> Dashboard
+				</a>	
+				<form action="/logout" method="POST" class="d-inline">
+		    		<button type="submit" class="btn btn-danger ml-2">
+		        		<i class="fas fa-sign-out-alt"></i> Log Out
+		    		</button>
+				</form>
+			</div>
+		</div>
     <div class="mt-4">
         <a href="/clients/${clientId}/pets/edit-existing" class="btn btn-primary btn-lg mb-3">Edit or Delete Existing Pet</a>
     </div>

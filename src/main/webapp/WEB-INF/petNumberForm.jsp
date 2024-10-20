@@ -7,12 +7,26 @@
 <html>
 <head>
 <link rel="stylesheet" href="/webjars/bootstrap/css/bootstrap.min.css" />
+<link rel="stylesheet" href="/css/styles.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 <meta charset="UTF-8">
 <title>Select Number of Pets</title>
 </head>
 <body>
 <div class="container">
-	<h1 class="my-5">Please Select Number of Pets!</h1>
+	<div class="d-flex justify-content-between align-items-center my-5">
+		<h1>Please Select Number of Pets</h1>
+		<div>
+			<a href="/home" class="btn btn-secondary">
+    			<i class="fas fa-home"></i> Dashboard
+			</a>
+			<form action="/logout" method="POST" class="d-inline">
+	    		<button type="submit" class="btn btn-danger ml-2">
+	        		<i class="fas fa-sign-out-alt"></i> Log Out
+	    		</button>
+			</form>
+		</div>
+	</div>
 	<form action="/pets/numberSelection" method="POST">
 	<input type="hidden" name="clientId" value="${clientId}" />
 	    <div class="mb-3">

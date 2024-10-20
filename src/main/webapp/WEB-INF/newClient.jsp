@@ -7,7 +7,8 @@
 <html>
 <head>
 <link rel="stylesheet" href="/webjars/bootstrap/css/bootstrap.min.css" />
-<script src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="/css/styles.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 <meta charset="UTF-8">
 <title>Add New Client</title>
 </head>
@@ -16,10 +17,14 @@
 	<div class="d-flex justify-content-between align-items-center my-5">
 		<h1>New Client</h1>
 		<div>
-			<a href="/home" class="btn btn-secondary">Dashboard</a>
+			<a href="/home" class="btn btn-secondary">
+    			<i class="fas fa-home"></i> Dashboard
+			</a>
 			<form action="/logout" method="POST" class="d-inline">
-				<input type="submit" value="Log out" class="btn btn-danger ml-2"/>
-			</form>
+    		<button type="submit" class="btn btn-danger ml-2">
+        		<i class="fas fa-sign-out-alt"></i> Log Out
+    		</button>
+		</form>
 		</div>
 	</div>
 	<h2 class="mb-3">Client Info</h2>

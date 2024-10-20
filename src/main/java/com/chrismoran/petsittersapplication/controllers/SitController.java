@@ -79,16 +79,19 @@ public class SitController {
 		if(userId == null) {
 			return "redirect:/";
 		}
-		// To make sure End Date is after Start date
-		if(newSit.getEndDate().isBefore(newSit.getStartDate())) {
-			result.rejectValue("endDate", "error.sit", "End date must be after start date");
-		}
 		
+		// To make sure End Date is after Start date
+		if (!result.hasFieldErrors("startDate") && !result.hasFieldErrors("endDate")) {
+			if(newSit.getEndDate().isBefore(newSit.getStartDate())) {
+				result.rejectValue("endDate", "error.sit", "End date must be after start date");
+			}
+		}
 		if(result.hasErrors()) {
 			List<Client> clients = clientService.getAllClients();
 			model.addAttribute("clients", clients);
 			model.addAttribute("newSit", newSit);
 			
+			// To pre-populate the client dropdown if a client exists
 			if(newSit.getClient() != null && newSit.getClient().getId() != null) {
 				Client selectedClient = clientService.getOneClient(newSit.getClient().getId());
 				model.addAttribute("selectedClient", selectedClient);

@@ -30,8 +30,8 @@ public class ClientService {
 	public List<Client> getAllClients() {
 		List<Client> clients = clientRepo.findAll();
 		for(Client client : clients) {
-			int dogsCount = (int) client.getPets().stream().filter(p -> p.getPetType().equals("dog")).count();
-			int catsCount = (int) client.getPets().stream().filter(p -> p.getPetType().equals("cat")).count();
+			int dogsCount = (int) client.getPets().stream().filter(p -> "dog".equals(p.getPetType())).count();
+	        int catsCount = (int) client.getPets().stream().filter(p -> "cat".equals(p.getPetType())).count();
 			
 			client.setNumberOfDogs(dogsCount);
 			client.setNumberOfCats(catsCount);
@@ -90,21 +90,5 @@ public class ClientService {
 		}
 		clientRepo.delete(clientToDelete);
 	}
-	
-	
+		
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

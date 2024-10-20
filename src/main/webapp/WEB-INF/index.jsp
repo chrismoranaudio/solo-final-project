@@ -6,12 +6,13 @@
 <html>
 <head>
 <link rel="stylesheet" href="/webjars/bootstrap/css/bootstrap.min.css" />
+<link rel="stylesheet" href="/css/styles.css">
 <meta charset="UTF-8">
 <title>Pet Sitter's Application</title>
 </head>
 <body>
 <div class="container">
-	<h1 class="display-4 my-5 text-primary fw-bold text-center">Pet Sitter's United Against Jeff Bezos</h1>
+	<h1 class="display-4 my-5 text-primary fw-bold text-center">Pet Sitter's Application</h1>
 	<div class="row">
 		<div class="col-sm-12 col-md-6">
 			<h2 class="display-5 mb-3">Register</h2>

@@ -1,0 +1,43 @@
+@charset "UTF-8";
+
+body {
+    background-color: #fffaf0; 
+}
+
+table {
+    background-color: #ffffff; 
+    border-radius: 8px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+}
+
+table tr:nth-child(odd) {
+    background-color: #f8f9fa; 
+}
+
+table tr:nth-child(even) {
+    background-color: #ffffff; 
+}
+
+.btn {
+  border-radius: 50px;
+  font-size: 1.1rem;
+}
+
+.btn-primary {
+  background-color: #4a90e2 !important;
+}
+
+.btn-success {
+  background-color: #5EBE7E !important;
+}
+
+.btn-danger {
+  background-color: #d0021b !important;
+}
+.btn-warning {
+	background-color: #F3C94E !important;
+}
+.btn:hover {
+  transform: scale(1.05);
+  transition: all 0.2s ease-in-out;
+}

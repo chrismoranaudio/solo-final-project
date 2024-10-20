@@ -48,30 +48,6 @@ public class PetService {
 		return petRepo.save(newPet);
 	}
 	
-	// Add pet to client
-	public void addPetToClient(Pet pet, Client client) {
-	    pet.setClient(client);
-	    petRepo.save(pet);
-	    if (pet.getPetType().equals("dog")) {
-	        client.setNumberOfDogs(client.getNumberOfDogs() + 1);
-	    } else if (pet.getPetType().equals("cat")) {
-	        client.setNumberOfCats(client.getNumberOfCats() + 1);
-	    }
-	    clientRepo.save(client);
-	}
-
-	// Remove a pet from a client
-	public void removePetFromClient(Pet pet, Client client) {
-	    client.getPets().remove(pet);
-	    if (pet.getPetType().equals("dog")) {
-	        client.setNumberOfDogs(client.getNumberOfDogs() - 1);
-	    } else if (pet.getPetType().equals("cat")) {
-	        client.setNumberOfCats(client.getNumberOfCats() - 1);
-	    }
-	    petRepo.delete(pet);
-	    clientRepo.save(client);
-	}
-	
 	// Update existing or add new pets
 	public void updateClientPets(Long clientId, PetDetailsForm form, boolean includeNewPets) {
 	    Client client = clientService.getOneClient(clientId);
@@ -79,9 +55,11 @@ public class PetService {
 	        throw new RuntimeException("Client not found");
 	    }
 
-	    List<Pet> updatedPets = new ArrayList<>();
+	    // Retrieve current pets of the client
+	    List<Pet> currentPets = client.getPets();
+	    List<Pet> updatedPets = new ArrayList<>(currentPets);
 
-	    // Process existing pets
+	    // Process existing pets (those submitted in the form)
 	    for (int i = 0; i < form.getPetIds().size(); i++) {
 	        Long petId = form.getPetIds().get(i);
 	        String name = form.getPetNames().get(i);
@@ -89,25 +67,22 @@ public class PetService {
 	        String type = form.getPetTypes().get(i);
 	        boolean toDelete = form.getPetsToDelete().contains(petId);
 
+	        Pet pet = petRepo.findById(petId).orElseThrow(() -> new RuntimeException("Pet not found"));
+
 	        if (!toDelete && name != null && !name.trim().isEmpty()) {
 	            // Update existing pet
-	            Pet pet = petRepo.findById(petId).orElseThrow(() -> new RuntimeException("Pet not found"));
 	            pet.setName(name);
 	            pet.setNotes(notes);
 	            pet.setPetType(type);
-	            pet.setClient(client);
-	            updatedPets.add(pet);  // Add pet to the updated list
+	            pet.setClient(client); // Make sure client is set
 	        } else if (toDelete) {
 	            // Remove the pet if marked for deletion
-	            Pet pet = petRepo.findById(petId).orElse(null);
-	            if (pet != null) {
-	            	updatedPets.remove(pet); // Remove pet from the updated list
-	                petRepo.delete(pet);
-	            }
+	            petRepo.delete(pet);
+	            updatedPets.remove(pet);
 	        }
 	    }
 
-	    // Process new pets if necessary
+	    // Process new pets (if necessary)
 	    if (includeNewPets) {
 	        // Process new dogs
 	        for (int i = 0; i < form.getDogNames().size(); i++) {
@@ -119,7 +94,7 @@ public class PetService {
 	                dog.setNotes(notes);
 	                dog.setPetType("dog");
 	                dog.setClient(client);
-	                updatedPets.add(dog);  // Add the new dog to the list
+	                updatedPets.add(dog);
 	            }
 	        }
 
@@ -133,21 +108,16 @@ public class PetService {
 	                cat.setNotes(notes);
 	                cat.setPetType("cat");
 	                cat.setClient(client);
-	                updatedPets.add(cat);  // Add the new cat to the list
+	                updatedPets.add(cat);
 	            }
 	        }
 	    }
 
-	    // Ensure updated pets are saved and client is updated
 	    client.setPets(updatedPets);
-	    petRepo.saveAll(updatedPets);  // Save all pets including new and updated pets
+	    petRepo.saveAll(updatedPets);  
 
-	    // Update client’s pet counts
-	    updateClientPetCounts(client);
-	    
-	    // Save the client with all updates
-	    clientRepo.save(client);
-	    
+	    updateClientPetCounts(client); 
+	    clientRepo.save(client); 
 	}
 
 	// Update client pet count
@@ -160,23 +130,18 @@ public class PetService {
 	    clientRepo.save(client);
 	}
 	
-	// Sending to master updater
+	// Sending to master updater (no new pets)
 	public void updateExistingPets(Long clientId, PetDetailsForm form) {
 	    updateClientPets(clientId, form, false);
 	}
 
-	// Sending to master updater
+	// Sending to master updater (include new pets)
 	public void updateClientPets(Client client, PetDetailsForm form) {
 	    updateClientPets(client.getId(), form, true);
 	}
 
 	// Add new pets
 	public void addNewPets(Long clientId, PetDetailsForm form) {
-	    PetDetailsForm newForm = new PetDetailsForm();
-	    newForm.setDogNames(form.getDogNames());
-	    newForm.setDogNotes(form.getDogNotes());
-	    newForm.setCatNames(form.getCatNames());
-	    newForm.setCatNotes(form.getCatNotes());
-	    updateClientPets(clientId, newForm, true);
+		updateClientPets(clientId, form, true);
 	}
 }

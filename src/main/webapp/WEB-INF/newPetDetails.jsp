@@ -8,44 +8,69 @@
 <head>
 <meta charset="UTF-8">
 <link rel="stylesheet" href="/webjars/bootstrap/css/bootstrap.min.css" />
+<link rel="stylesheet" href="/css/styles.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 <title>New Pet Details</title>
 </head>
 <body>
 <div class="container">
-    <h1 class="my-5">New Pet Details</h1>
-    <form:form action="/clients/${clientId}/pets/add-details" method="POST" modelAttribute="petDetailsForm">
-        <h2>Dogs</h2>
-        <c:set var="numDogs" value="${numberOfDogs != null ? numberOfDogs : 0}" />
-        <c:if test="${numDogs > 0}">
-            <c:forEach begin="0" end="${numDogs - 1}" var="index">
-                <div class="mb-3">
-                    <form:label path="dogNames[${index}]">Dog #${index + 1}'s Name:</form:label>
-                    <form:input path="dogNames[${index}]" class="form-control"/>
-                    <form:errors path="dogNames[${index}]" class="text-danger"/>
-                </div>
-                <div class="mb-3">
-                    <form:label path="dogNotes[${index}]">Dog #${index + 1}'s Notes:</form:label>
-                    <form:textarea path="dogNotes[${index}]" class="form-control"/>
-                </div>
-            </c:forEach>
-        </c:if>
-        <h2>Cats</h2>
-        <c:set var="numCats" value="${numberOfCats != null ? numberOfCats : 0}" />
-        <c:if test="${numCats > 0}">
-            <c:forEach begin="0" end="${numCats - 1}" var="index">
-                <div class="mb-3">
-                    <form:label path="catNames[${index}]">Cat #${index + 1}'s Name:</form:label>
-                    <form:input path="catNames[${index}]" class="form-control"/>
-                    <form:errors path="catNames[${index}]" class="text-danger"/>
-                </div>
-                <div class="mb-3">
-                    <form:label path="catNotes[${index}]">Cat #${index + 1}'s Notes:</form:label>
-                    <form:textarea path="catNotes[${index}]" class="form-control"/>
-                </div>
-            </c:forEach>
-        </c:if>
+    <div class="d-flex justify-content-between align-items-center my-5">
+		<h1>New Pet Details</h1>
+		<div>
+			<a href="/home" class="btn btn-secondary">
+    			<i class="fas fa-home"></i> Dashboard
+			</a>
+			<form action="/logout" method="POST" class="d-inline">
+	    		<button type="submit" class="btn btn-danger ml-2">
+	        		<i class="fas fa-sign-out-alt"></i> Log Out
+	    		</button>
+			</form>
+		</div>
+	</div>
+	<form:form action="/clients/${clientId}/pets/add-details" method="POST" modelAttribute="petDetailsForm">
+    <input type="hidden" name="numberOfDogs" value="${numberOfDogs}"/>
+    <input type="hidden" name="numberOfCats" value="${numberOfCats}"/>
+    <div class="row">
+        <div class="col-md-6">
+            <h2 class="mb-4">Doggos</h2>
+            <c:set var="numDogs" value="${numberOfDogs != null ? numberOfDogs : 0}" />
+            <c:if test="${numDogs > 0}">
+                <c:forEach var="i" begin="0" end="${numDogs - 1}">
+                    <div class="mb-3">
+                        <form:label path="dogNames[${i}]">Dog #${i + 1}'s Name:</form:label>
+                        <form:input path="dogNames[${i}]" class="form-control" placeholder="Dog #${i + 1}'s Name"/>
+                        <form:errors path="dogNames[${i}]" class="text-danger"/>
+                    </div>
+                    <div class="mb-3">
+                        <form:label path="dogNotes[${i}]">Dog #${i + 1}'s Notes:</form:label>
+                        <form:textarea path="dogNotes[${i}]" class="form-control" placeholder="Dog #${i + 1}'s Notes"/>
+                    </div>
+                </c:forEach>
+            </c:if>
+        </div>
+
+        <div class="col-md-6">
+            <h2 class="mb-4">Kitties</h2>
+            <c:set var="numCats" value="${numberOfCats != null ? numberOfCats : 0}" />
+            <c:if test="${numCats > 0}">
+                <c:forEach var="i" begin="0" end="${numCats - 1}" >
+                    <div class="mb-3">
+                        <form:label path="catNames[${i}]">Cat #${i + 1}'s Name:</form:label>
+                        <form:input path="catNames[${i}]" class="form-control" placeholder="Cat #${i + 1}'s Name"/>
+                        <form:errors path="catNames[${i}]" class="text-danger"/>
+                    </div>
+                    <div class="mb-3">
+                        <form:label path="catNotes[${i}]">Cat #${i + 1}'s Notes:</form:label>
+                        <form:textarea path="catNotes[${i}]" class="form-control" placeholder="Cat #${i + 1}'s Notes"/>
+                    </div>
+                </c:forEach>
+            </c:if>
+        </div>
+    </div>
+    <div class="text-center mt-4">
         <button type="submit" class="btn btn-primary">Add Pets</button>
-    </form:form>
+    </div>
+</form:form>
 </div>
 </body>
 </html>
