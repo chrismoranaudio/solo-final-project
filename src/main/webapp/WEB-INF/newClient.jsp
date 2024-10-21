@@ -48,9 +48,7 @@
                 </div>
             </div>
         </div>
-
         <div class="col-md-1"></div> 
-
         <div class="col-md-5">
             <div class="mb-3 row">
                 <label for="priceQuoted" class="col-md-4 col-form-label">Price Quoted:</label>
@@ -64,7 +62,6 @@
             </div>
         </div>
     </div>
-
     <div class="row mb-3">
         <div class="col-md-6">
             <div class="form-floating mb-3">
@@ -73,9 +70,7 @@
                 <form:errors path="address" class="text-danger"/>
             </div>
         </div>
-
         <div class="col-md-1"></div> 
-
         <div class="col-md-5">
             <div class="mb-3 row">
                 <label for="dailyVisits" class="col-md-4 col-form-label">Daily Visits:</label>
@@ -84,13 +79,11 @@
                     <form:errors path="dailyVisits" class="text-danger"/>
                 </div>
             </div>
-
             <div class="mb-3 row">
                 <div class="col-md-8"></div>
             </div>
         </div>
     </div>
-
     <div class="row mb-3">
         <div class="col-md-6">
             <div class="form-floating mb-3">
@@ -99,9 +92,7 @@
                 <form:errors path="phoneNumber" class="text-danger"/>
             </div>
         </div>
-
         <div class="col-md-1"></div> 
-
         <div class="col-md-5">
             <div class="mb-3 row">
                 <div class="col-md-8">

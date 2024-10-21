@@ -136,7 +136,7 @@ public class SitController {
 		if(thisSit == null) {
 			return "redirect:/home";
 		}
-		
+		// To make sure end date is after start date
 		if(editSit.getEndDate().isBefore(editSit.getStartDate())) {
 			result.rejectValue("endDate", "error.sit", "End date must be after start date");
 		}

@@ -22,7 +22,7 @@
     </div>
     <div class="row">
         <div class="col-md-6">
-            <div class="card shadow-sm mb-4">
+            <div class="card shadow-lg mb-4">
                 <div class="card-body text-center">
                     <h5 class="card-title">Client List</h5>
                     <p class="card-text">View and manage all your clients.</p>
@@ -33,10 +33,10 @@
             </div>
         </div>
         <div class="col-md-6">
-            <div class="card shadow-sm mb-4">
+            <div class="card shadow-lg mb-4">
                 <div class="card-body text-center">
                     <h5 class="card-title">New Client</h5>
-                    <p class="card-text">Add a new client to your list.</p>
+                    <p class="card-text">Add a new client to your roster.</p>
                     <a href="/clients/new" class="btn btn-success">
                         <i class="fas fa-user-plus"></i> Add Client
                     </a>
@@ -44,7 +44,7 @@
             </div>
         </div>
         <div class="col-md-6">
-            <div class="card shadow-sm mb-4">
+            <div class="card shadow-lg mb-4">
                 <div class="card-body text-center">
                     <h5 class="card-title">Booked Sits</h5>
                     <p class="card-text">View and manage all booked sits.</p>
@@ -55,7 +55,7 @@
             </div>
         </div>
         <div class="col-md-6">
-            <div class="card shadow-sm mb-4">
+            <div class="card shadow-lg mb-4">
                 <div class="card-body text-center">
                     <h5 class="card-title">New Sit</h5>
                     <p class="card-text">Schedule a new sit.</p>

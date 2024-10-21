@@ -23,6 +23,7 @@ public class PetDetailsForm {
     // Constructor
     public PetDetailsForm() {}
 
+    // Getters & Setters
 	public List<String> getDogNames() {
 		return dogNames;
 	}

@@ -67,7 +67,7 @@ public class ClientController {
 		String formattedCreatedAt = createdAt.format(client.getCreatedAt());
 		model.addAttribute("formattedCreatedAt", formattedCreatedAt);
 		
-		// For formatting the phone number
+		// Format the phone number
 		String formattedPhoneNumber = formatPhoneNumber(client.getPhoneNumber());
 		model.addAttribute("formattedPhoneNumber", formattedPhoneNumber);
 		
@@ -76,7 +76,7 @@ public class ClientController {
 		model.addAttribute("client", client);
 		return "viewClient.jsp";
 	}
-	
+	// Method for formatting phone number
 	private String formatPhoneNumber(String phoneNumber) {
 		String cleaned = phoneNumber.replaceAll("[^\\d]", "");
 		return cleaned.replaceFirst("(\\d{3})(\\d{3})(\\d{4})", "($1) $2-$3");
@@ -128,7 +128,7 @@ public class ClientController {
 	    return "editClient.jsp";
 	}
 
-	@PutMapping("/clients/{id}/edit")
+	@PutMapping("/clients/{id}/update")
 	public String processEditClientForm(
 			@PathVariable("id") Long id, 
 			@Valid @ModelAttribute("client") Client updatedClient, 

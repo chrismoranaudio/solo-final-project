@@ -28,7 +28,7 @@
 		</div>
 	</div>
 	<h2 class="mb-3">Client Info</h2>
-	<form:form action="/clients/${client.id}/edit" method="POST" modelAttribute="client">
+	<form:form action="/clients/${client.id}/update" method="POST" modelAttribute="client">
 	<input type="hidden" name="_method" value="put"/>
     <div class="row mb-3">
         <div class="col-md-6">

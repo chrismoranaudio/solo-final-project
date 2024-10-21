@@ -30,9 +30,10 @@ public class ClientService {
 	public List<Client> getAllClients() {
 		List<Client> clients = clientRepo.findAll();
 		for(Client client : clients) {
+			// Checking how many dogs and cats the client has
 			int dogsCount = (int) client.getPets().stream().filter(p -> "dog".equals(p.getPetType())).count();
 	        int catsCount = (int) client.getPets().stream().filter(p -> "cat".equals(p.getPetType())).count();
-			
+			// Making sure numberOfDogs and numberOfCats is always up-to-date
 			client.setNumberOfDogs(dogsCount);
 			client.setNumberOfCats(catsCount);
 		}

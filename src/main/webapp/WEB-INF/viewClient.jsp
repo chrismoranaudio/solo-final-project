@@ -34,7 +34,7 @@
                     <h4 class="card-title mb-4">Client Information</h4>
                     <p class="card-text"><strong>Address:</strong> ${client.address}</p>
                     <p class="card-text"><strong>Phone Number:</strong> ${formattedPhoneNumber}</p>
-                    <p class="card-text"><strong>Price Quoted:</strong> $<fmt:formatNumber value="${client.priceQuoted}" maxFractionDigits="0"/></p>
+                    <p class="card-text"><strong>Price Quoted:</strong> $${client.priceQuoted}</p>
                     <p class="card-text"><strong>Daily Visits Required:</strong> ${client.dailyVisits}</p>
                     <p class="card-text"><strong>Client Since:</strong> ${formattedCreatedAt}</p>
                 </div>

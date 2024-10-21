@@ -36,13 +36,13 @@
 	                <c:when test="${numberOfDogs > 0}">
 	                    <c:forEach var="i" begin="1" end="${numberOfDogs}">
 	                        <div class="mb-3">
-	                            <label for="dogNames[${i-1}]">Dog #${i} Name:</label>
-	                            <form:input path="dogNames[${i-1}]" class="form-control" placeholder="Dog #${i} Name" />
+	                            <label for="dogNames[${i-1}]">Dog #${i}'s Name:</label>
+	                            <form:input path="dogNames[${i-1}]" class="form-control" placeholder="Dog #${i}'s Name" />
 	                            <form:errors path="dogNames[${i-1}]" class="text-danger"/>
 	                        </div>
 	                        <div class="mb-3">
-	                            <label for="dogNotes[${i-1}]">Dog #${i} Notes:</label>
-	                            <form:textarea path="dogNotes[${i-1}]" class="form-control" placeholder="Dog #${i} Notes"></form:textarea>
+	                            <label for="dogNotes[${i-1}]">Dog #${i}'s Notes:</label>
+	                            <form:textarea path="dogNotes[${i-1}]" class="form-control" placeholder="Dog #${i}'s Notes"></form:textarea>
 	                        </div>
 	                    </c:forEach>
 	                </c:when>
@@ -57,13 +57,13 @@
 	                <c:when test="${numberOfCats > 0}">
 	                    <c:forEach var="i" begin="1" end="${numberOfCats}">
 	                        <div class="mb-3">
-	                            <label for="catNames[${i-1}]">Cat #${i} Name:</label>
-	                            <form:input path="catNames[${i-1}]" class="form-control" placeholder="Cat #${i} Name" />
+	                            <label for="catNames[${i-1}]">Cat #${i}'s Name:</label>
+	                            <form:input path="catNames[${i-1}]" class="form-control" placeholder="Cat #${i}'s Name" />
 	                            <form:errors path="catNames[${i-1}]" class="text-danger"/>
 	                        </div>
 	                        <div class="mb-3">
-	                            <label for="catNotes[${i-1}]">Cat #${i} Notes:</label>
-	                            <form:textarea path="catNotes[${i-1}]" class="form-control" placeholder="Cat #${i} Notes"></form:textarea>
+	                            <label for="catNotes[${i-1}]">Cat #${i}'s Notes:</label>
+	                            <form:textarea path="catNotes[${i-1}]" class="form-control" placeholder="Cat #${i}'s Notes"></form:textarea>
 	                        </div>
 	                    </c:forEach>
 	                </c:when>

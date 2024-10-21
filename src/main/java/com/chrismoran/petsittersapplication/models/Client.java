@@ -65,10 +65,6 @@ public class Client {
     @Digits(integer = 10, fraction = 0, message = "Price quoted must be a valid whole number")
     private Integer priceQuoted;
     
-//    @NotNull(message="Price quoted is required")
-//    @Min(value=0, message="Price quoted must be a positive number")
-//    private Double priceQuoted;
-    
     @NotNull(message="Please enter number of daily visits required")
     @Min(value=1, message="At least 1 daily visit is required")
     @Max(value=4, message="Maximum 4 dailys visits are allowed")

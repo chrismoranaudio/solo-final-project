@@ -58,7 +58,7 @@
 	        if (checkboxes.length > 0) {
 	            return confirm('Are you sure you want to delete the selected pet(s)?');
 	        }
-	        return true; // Allow form submission if no pets are selected for deletion.
+	        return true;
 	    }
 	</script>
 </body>

@@ -12,8 +12,8 @@
 </head>
 <body>
 <div class="container">
-	<h1 class="display-4 mt-5 text-primary fw-bold text-center">Your FB's BF!</h1>
-	<h2 class="mb-5 text-primary text-center">(Your fur-babies' best friend!)</h2>
+	<h1 class="display-4 mt-5 text-primary text-center">Paw-Planner</h1>
+	<h3 class="mb-5 text-primary text-center">(Time Management for Pet-Sitters)</h3>
 	<div class="row">
 		<div class="col-sm-12 col-md-6">
 			<h2 class="display-5 mb-3">Register</h2>

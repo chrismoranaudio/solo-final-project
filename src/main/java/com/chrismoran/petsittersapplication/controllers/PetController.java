@@ -69,7 +69,7 @@ public class PetController {
 			return "redirect:/";
 		}
 		
-	    // Store the number of dogs and cats in the session
+	    // Store the number of dogs and cats, plus client id in session
 	    session.setAttribute("numberOfDogs", numberOfDogs);
 	    session.setAttribute("numberOfCats", numberOfCats);
 	    session.setAttribute("clientId", clientId);
@@ -85,6 +85,7 @@ public class PetController {
 			return "redirect:/";
 		}
 		
+		// Retrieve number of dogs and cats to populate form
 	    Integer numberOfDogs = (Integer) session.getAttribute("numberOfDogs");
 	    Integer numberOfCats = (Integer) session.getAttribute("numberOfCats");
 	    Long clientId = (Long) session.getAttribute("clientId");
@@ -93,6 +94,7 @@ public class PetController {
 	    model.addAttribute("numberOfCats", numberOfCats);
 	    model.addAttribute("clientId", clientId);
 
+	    // Send the Pet Details Form to the view
 	    model.addAttribute("petDetailsForm", new PetDetailsForm());
 
 	    return "petDetailsForm.jsp"; 
@@ -120,6 +122,7 @@ public class PetController {
 			return "redirect:/clients/all";
 		}
 		
+		// Sending form information to update (add) the client's pets
 		petService.updateClientPets(clientId, form, true);
 		
 		return "redirect:/clients/all";
@@ -221,6 +224,7 @@ public class PetController {
 	    model.addAttribute("numberOfCats", numberOfCats);
 	    model.addAttribute("petDetailsForm", new PetDetailsForm());
 	    
+	    // Sends the new numberOfDogs and numberOfCats to the "Add Details" form
 	    return "redirect:/clients/"+clientId+"/pets/add-details?numberOfDogs="+numberOfDogs+"&numberOfCats="+numberOfCats;
 	}
 	

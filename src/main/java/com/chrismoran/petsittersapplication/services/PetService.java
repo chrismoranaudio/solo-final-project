@@ -48,7 +48,7 @@ public class PetService {
 		return petRepo.save(newPet);
 	}
 	
-	// Update existing or add new pets
+	// Update a client's existing, or add new pets
 	public void updateClientPets(Long clientId, PetDetailsForm form, boolean includeNewPets) {
 	    Client client = clientService.getOneClient(clientId);
 	    if (client == null) {
@@ -57,6 +57,7 @@ public class PetService {
 
 	    // Retrieve current pets of the client
 	    List<Pet> currentPets = client.getPets();
+	    // Create a new list, starting with the client's current pets
 	    List<Pet> updatedPets = new ArrayList<>(currentPets);
 
 	    // Process existing pets (those submitted in the form)
@@ -74,7 +75,7 @@ public class PetService {
 	            pet.setName(name);
 	            pet.setNotes(notes);
 	            pet.setPetType(type);
-	            pet.setClient(client); // Make sure client is set
+	            pet.setClient(client); 
 	        } else if (toDelete) {
 	            // Remove the pet if marked for deletion
 	            petRepo.delete(pet);
@@ -82,7 +83,7 @@ public class PetService {
 	        }
 	    }
 
-	    // Process new pets (if necessary)
+	    // Process new pets, if necessary (boolean "true" is passed)
 	    if (includeNewPets) {
 	        // Process new dogs
 	        for (int i = 0; i < form.getDogNames().size(); i++) {
