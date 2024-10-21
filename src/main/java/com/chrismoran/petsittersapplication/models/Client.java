@@ -1,5 +1,6 @@
 package com.chrismoran.petsittersapplication.models;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -11,6 +12,8 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
@@ -75,10 +78,14 @@ public class Client {
     private Integer numberOfCats = 0;
     
     @OneToMany(mappedBy="client", fetch = FetchType.LAZY)
-    private List<Pet> pets;
+    private List<Pet> pets = new ArrayList<>();
     
     @OneToMany(mappedBy="client", fetch = FetchType.LAZY)
-    private List<Sit> sits;
+    private List<Sit> sits = new ArrayList<>();
+    
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="user_id")
+    private User user;
     
     // Constructors
     public Client() {}
@@ -89,7 +96,7 @@ public class Client {
 			@NotBlank(message = "Phone number is required") @Pattern(regexp = "^(\\+0?1\\s)?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4}$", message = "Please enter a valid phone number") String phoneNumber,
 			@NotNull(message = "Price quoted is required") @Min(value = 0, message = "Price quoted must be a positive number") @Digits(integer = 10, fraction = 0, message = "Price quoted must be a valid whole number") Integer priceQuoted,
 			@NotNull(message = "Please enter number of daily visits required") @Min(value = 1, message = "At least 1 daily visit is required") @Max(value = 4, message = "Maximum 4 dailys visits are allowed") Integer dailyVisits,
-			Integer numberOfDogs, Integer numberOfCats, List<Pet> pets, List<Sit> sits) {
+			Integer numberOfDogs, Integer numberOfCats, List<Pet> pets, List<Sit> sits, User user) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.address = address;
@@ -100,6 +107,7 @@ public class Client {
 		this.numberOfCats = numberOfCats;
 		this.pets = pets;
 		this.sits = sits;
+		this.user = user;
 	}
 
 	public Long getId() {
@@ -206,5 +214,12 @@ public class Client {
 		this.sits = sits;
 	}
 
-	
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
 }

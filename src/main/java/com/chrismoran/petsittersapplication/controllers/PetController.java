@@ -117,13 +117,13 @@ public class PetController {
 		    return "petDetailsForm.jsp";
 		}
 		
-		Client client = clientService.getOneClient(clientId);
+		Client client = clientService.getOneClient(clientId, userId);
 		if (client == null) {
 			return "redirect:/clients/all";
 		}
 		
 		// Sending form information to update (add) the client's pets
-		petService.updateClientPets(clientId, form, true);
+		petService.updateClientPets(clientId, userId, form, true);
 		
 		return "redirect:/clients/all";
 	
@@ -152,7 +152,7 @@ public class PetController {
 			return "redirect:/";
 		}
 		
-		Client client = clientService.getOneClient(clientId);
+		Client client = clientService.getOneClient(clientId, userId);
 		if(client == null) {
 			return "redirect:/clients/all";
 		}
@@ -182,12 +182,12 @@ public class PetController {
 		}
 		
 		if(result.hasErrors()) {
-			Client client = clientService.getOneClient(clientId);
+			Client client = clientService.getOneClient(clientId, userId);
 			model.addAttribute("client", client);
 			return "editExistingPets.jsp";
 		}
 		
-		petService.updateExistingPets(clientId, form);
+		petService.updateExistingPets(clientId, userId, form);
 		
 		return "redirect:/clients/all";
 			
@@ -237,7 +237,7 @@ public class PetController {
 		if(userId == null) {
 			return "redirect:/";
 		}
-		Client client = clientService.getOneClient(clientId);
+		Client client = clientService.getOneClient(clientId, userId);
 		if(client == null) {
 			return "redirect:/clients/all";
 		}
@@ -269,7 +269,7 @@ public class PetController {
 			return "newPetDetails.jsp";
 		}
 		
-	    petService.addNewPets(clientId, form);
+	    petService.addNewPets(clientId, userId, form);
 	    return "redirect:/clients/all";
 	}
 

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.chrismoran.petsittersapplication.models.Client;
 import com.chrismoran.petsittersapplication.models.Pet;
 import com.chrismoran.petsittersapplication.models.Sit;
+import com.chrismoran.petsittersapplication.models.User;
 import com.chrismoran.petsittersapplication.repositories.ClientRepository;
 import com.chrismoran.petsittersapplication.repositories.PetRepository;
 import com.chrismoran.petsittersapplication.repositories.SitRepository;
@@ -26,9 +27,12 @@ public class ClientService {
 	@Autowired
 	private SitRepository sitRepo;
 	
+	@Autowired
+	private UserService userService;
+	
 	// Get all clients
-	public List<Client> getAllClients() {
-		List<Client> clients = clientRepo.findAll();
+	public List<Client> getAllClientsForUser(Long userId) {
+		List<Client> clients = clientRepo.findAllByUserId(userId);
 		for(Client client : clients) {
 			// Checking how many dogs and cats the client has
 			int dogsCount = (int) client.getPets().stream().filter(p -> "dog".equals(p.getPetType())).count();
@@ -42,19 +46,16 @@ public class ClientService {
 	}
 	
 	// Create a new client
-	public Client createClient(Client newClient) {
+	public Client createClient(Client newClient, Long userId) {
+		User user = userService.getOneUser(userId);
+		newClient.setUser(user);
 		return clientRepo.save(newClient);
 	}
 	
 	// Find one client by id
-	public Client getOneClient(Long id) {
-		Optional<Client> possibleClient = clientRepo.findById(id);
+	public Client getOneClient(Long clientId, Long userId) {
+		Optional<Client> possibleClient = clientRepo.findByIdAndUserId(clientId, userId);
 		return possibleClient.orElse(null);
-	}
-	
-	// Edit client
-	public Client updateClient(Client clientToEdit) {
-		return clientRepo.save(clientToEdit);
 	}
 	
 	// Update client details only (nothing pet related)
@@ -70,26 +71,30 @@ public class ClientService {
 	
 	
 	// Delete by id
-	public void deleteClient(Long id) {
-		Client clientToDelete = this.getOneClient(id);
-		for(Pet petToDelete : clientToDelete.getPets()) {
-			petRepo.delete(petToDelete);
+	public void deleteClient(Long id, Long userId) {
+		Client clientToDelete = this.getOneClient(id, userId);
+		if(clientToDelete != null) {
+			for(Pet petToDelete : clientToDelete.getPets()) {
+				petRepo.delete(petToDelete);
+			}
+			for(Sit sitToDelete : clientToDelete.getSits()) {
+				sitRepo.delete(sitToDelete);
+			}
+			clientRepo.deleteById(id);
 		}
-		for(Sit sitToDelete : clientToDelete.getSits()) {
-			sitRepo.delete(sitToDelete);
-		}
-		clientRepo.deleteById(id);
 	}
 	
 	// Delete client object
-	public void deleteClient(Client clientToDelete) {
-		for(Pet petToDelete : clientToDelete.getPets()) {
-			petRepo.delete(petToDelete);
+	public void deleteClient(Client clientToDelete, Long userId) {
+		if(clientToDelete.getUser().getId().equals(userId)) {
+			for(Pet petToDelete : clientToDelete.getPets()) {
+				petRepo.delete(petToDelete);
+			}
+			for(Sit sitToDelete : clientToDelete.getSits()) {
+				sitRepo.delete(sitToDelete);
+			}
+			clientRepo.delete(clientToDelete);
 		}
-		for(Sit sitToDelete : clientToDelete.getSits()) {
-			sitRepo.delete(sitToDelete);
-		}
-		clientRepo.delete(clientToDelete);
 	}
 		
 }

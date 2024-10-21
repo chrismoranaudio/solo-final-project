@@ -49,10 +49,10 @@ public class PetService {
 	}
 	
 	// Update a client's existing, or add new pets
-	public void updateClientPets(Long clientId, PetDetailsForm form, boolean includeNewPets) {
-	    Client client = clientService.getOneClient(clientId);
+	public void updateClientPets(Long clientId, Long userId, PetDetailsForm form, boolean includeNewPets) {
+	    Client client = clientService.getOneClient(clientId, userId);
 	    if (client == null) {
-	        throw new RuntimeException("Client not found");
+	        throw new RuntimeException("Client not found or does not belong to the user");
 	    }
 
 	    // Retrieve current pets of the client
@@ -132,17 +132,17 @@ public class PetService {
 	}
 	
 	// Sending to master updater (no new pets)
-	public void updateExistingPets(Long clientId, PetDetailsForm form) {
-	    updateClientPets(clientId, form, false);
+	public void updateExistingPets(Long clientId, Long userId, PetDetailsForm form) {
+	    updateClientPets(clientId, userId, form, false);
 	}
 
 	// Sending to master updater (include new pets)
-	public void updateClientPets(Client client, PetDetailsForm form) {
-	    updateClientPets(client.getId(), form, true);
+	public void updateClientPets(Client client, Long userId, PetDetailsForm form) {
+	    updateClientPets(client.getId(), userId, form, true);
 	}
 
 	// Add new pets
-	public void addNewPets(Long clientId, PetDetailsForm form) {
-		updateClientPets(clientId, form, true);
+	public void addNewPets(Long clientId, Long userId, PetDetailsForm form) {
+		updateClientPets(clientId, userId, form, true);
 	}
 }

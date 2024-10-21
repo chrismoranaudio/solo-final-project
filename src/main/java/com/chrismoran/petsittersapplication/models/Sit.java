@@ -70,7 +70,7 @@ public class Sit {
     private Visit finalVisit;
     
     @ManyToOne
-    @JoinColumn(name="client_id", nullable=false)
+    @JoinColumn(name="client_id")
     private Client client;
     
     // Constructors

@@ -1,19 +1,21 @@
 package com.chrismoran.petsittersapplication.repositories;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import com.chrismoran.petsittersapplication.models.Client;
 import com.chrismoran.petsittersapplication.models.Sit;
 
 @Repository
 public interface SitRepository extends CrudRepository<Sit, Long> {
 
 	List<Sit> findAll();
+		
+	List<Sit> findByClientIdAndClient_UserIdOrderByStartDateAsc(Long clientId, Long userId);
 	
-	List<Sit> findByClient(Client client);
+	List<Sit> findAllByClient_UserIdOrderByStartDateAsc(Long userId);
 	
-	List<Sit> findAllByOrderByStartDateAsc();
+	Optional<Sit> findByIdAndClient_UserId(Long id, Long userId);
 }

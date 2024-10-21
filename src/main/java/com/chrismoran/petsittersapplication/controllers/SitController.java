@@ -42,7 +42,7 @@ public class SitController {
 		if(userId == null) {
 			return "redirect:/";
 		}
-		List <Sit> sits = sitService.getAllSits();
+		List <Sit> sits = sitService.getAllSits(userId);
 		
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd");
 		model.addAttribute("dateFormatter", formatter);
@@ -57,11 +57,11 @@ public class SitController {
 		if(userId == null) {
 			return "redirect:/";
 		}
-		List<Client> clients = clientService.getAllClients();
+		List<Client> clients = clientService.getAllClientsForUser(userId);
 		model.addAttribute("clients", clients);
 		
 		if(clientId != null) {
-			Client client = clientService.getOneClient(clientId);
+			Client client = clientService.getOneClient(clientId, userId);
 			model.addAttribute("selectedClient", client);
 		}
 		
@@ -79,7 +79,17 @@ public class SitController {
 		if(userId == null) {
 			return "redirect:/";
 		}
-		
+		if (newSit.getClient() != null) {
+	        Client client = clientService.getOneClient(newSit.getClient().getId(), userId);
+	        if (client == null || !client.getUser().getId().equals(userId)) {
+	            result.rejectValue("client", "error.sit", "Invalid client selected");
+	        } else {
+	            newSit.setClient(client);
+	        }
+		}
+		if(newSit.getClient() != null && !newSit.getClient().getUser().getId().equals(userId)) {
+			result.rejectValue("client", "error.sit", "Invalid client selected");
+		}
 		// To make sure End Date is after Start date
 		if (!result.hasFieldErrors("startDate") && !result.hasFieldErrors("endDate")) {
 			if(newSit.getEndDate().isBefore(newSit.getStartDate())) {
@@ -87,13 +97,13 @@ public class SitController {
 			}
 		}
 		if(result.hasErrors()) {
-			List<Client> clients = clientService.getAllClients();
+			List<Client> clients = clientService.getAllClientsForUser(userId);
 			model.addAttribute("clients", clients);
 			model.addAttribute("newSit", newSit);
 			
 			// To pre-populate the client dropdown if a client exists
 			if(newSit.getClient() != null && newSit.getClient().getId() != null) {
-				Client selectedClient = clientService.getOneClient(newSit.getClient().getId());
+				Client selectedClient = clientService.getOneClient(newSit.getClient().getId(), userId);
 				model.addAttribute("selectedClient", selectedClient);
 			}
 			return "newSit.jsp";
@@ -111,10 +121,10 @@ public class SitController {
 		if(userId == null) {
 			return "redirect:/";
 		}
-		List<Client> clients = clientService.getAllClients();
+		List<Client> clients = clientService.getAllClientsForUser(userId);
 		model.addAttribute("clients", clients);
 		
-		Sit thisSit = sitService.getOneSit(id);
+		Sit thisSit = sitService.getOneSit(id, userId);
 		if(thisSit == null) {
 			return "redirect:/home";
 		}
@@ -132,7 +142,7 @@ public class SitController {
 		if(userId == null) {
 			return "redirect:/";
 		}
-		Sit thisSit = sitService.getOneSit(id);
+		Sit thisSit = sitService.getOneSit(id, userId);
 		if(thisSit == null) {
 			return "redirect:/home";
 		}
@@ -142,7 +152,7 @@ public class SitController {
 		}
 		
 		if(result.hasErrors()) {
-			model.addAttribute("clients", clientService.getAllClients());
+			model.addAttribute("clients", clientService.getAllClientsForUser(userId));
 			return "editSit.jsp";
 		}
 		
@@ -157,7 +167,7 @@ public class SitController {
 		if(userId == null) {
 			return "redirect:/";
 		}
-		Sit sitToDelete = sitService.getOneSit(id);
+		Sit sitToDelete = sitService.getOneSit(id, userId);
 		if(sitToDelete == null) {
 			return "redirect:/home";
 		}

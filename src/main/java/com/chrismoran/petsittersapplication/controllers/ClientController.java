@@ -17,8 +17,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 import com.chrismoran.petsittersapplication.models.Client;
 import com.chrismoran.petsittersapplication.models.Sit;
+import com.chrismoran.petsittersapplication.models.User;
 import com.chrismoran.petsittersapplication.services.ClientService;
 import com.chrismoran.petsittersapplication.services.SitService;
+import com.chrismoran.petsittersapplication.services.UserService;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -33,6 +35,9 @@ public class ClientController {
 	private SitService sitService;
 	
 	@Autowired
+	private UserService userService;
+	
+	@Autowired
 	private HttpSession session;
 	
 	// Display the client list
@@ -42,7 +47,7 @@ public class ClientController {
 		if(userId == null) {
 			return "redirect:/";
 		}
-		model.addAttribute("clients", clientService.getAllClients());
+		model.addAttribute("clients", clientService.getAllClientsForUser(userId));
 		return "allClients.jsp";
 	}
 	
@@ -54,7 +59,7 @@ public class ClientController {
 			return "redirect:/";
 		}
 		
-		Client client = clientService.getOneClient(clientId);
+		Client client = clientService.getOneClient(clientId, userId);
 		if(client == null) {
 			return "redirect:/clients/all";
 		}
@@ -71,7 +76,7 @@ public class ClientController {
 		String formattedPhoneNumber = formatPhoneNumber(client.getPhoneNumber());
 		model.addAttribute("formattedPhoneNumber", formattedPhoneNumber);
 		
-		List<Sit> currentSits = sitService.findSitsByClient(client);
+		List<Sit> currentSits = sitService.findSitsByClientIdAndUserId(clientId, userId);
 		model.addAttribute("currentSits", currentSits);
 		model.addAttribute("client", client);
 		return "viewClient.jsp";
@@ -105,7 +110,10 @@ public class ClientController {
 	        return "newClient.jsp";
 	    }
 
-	    Client savedClient = clientService.createClient(newClient);
+	    User loggedInUser = userService.getOneUser(userId);
+	    newClient.setUser(loggedInUser);
+	    
+	    Client savedClient = clientService.createClient(newClient, userId);
 
 	    // Redirect to the pet form
 	    return "redirect:/pets/numberSelection?clientId="+savedClient.getId();
@@ -120,7 +128,7 @@ public class ClientController {
 			return "redirect:/";
 		}
 		
-		Client client = clientService.getOneClient(id);
+		Client client = clientService.getOneClient(id, userId);
 	    if (client == null) {
 	        return "redirect:/clients/all";
 	    }
@@ -141,7 +149,7 @@ public class ClientController {
 	    if (result.hasErrors()) {
 	        return "editClient.jsp";
 	    }
-	    Client existingClient = clientService.getOneClient(id);
+	    Client existingClient = clientService.getOneClient(id, userId);
 	    if(existingClient == null) {
 	    	return "redirect:/clients/all";
 	    }
@@ -158,11 +166,11 @@ public class ClientController {
 		if(userId == null) {
 			return "redirect:/";
 		}
-		Client clientToDelete = clientService.getOneClient(id);
+		Client clientToDelete = clientService.getOneClient(id, userId);
 		if(clientToDelete == null) {
 			return "redirect:/home";
 		}
-		clientService.deleteClient(id);
+		clientService.deleteClient(id, userId);
 		return "redirect:/clients/all";
 	}
 }
